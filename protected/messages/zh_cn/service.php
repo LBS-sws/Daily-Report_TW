@@ -11,6 +11,7 @@ return array(
 	'Paid Amt'=>'服务金额',
 	'Install Amt'=>'装机金额',
 	'Salesman'=>'业务员',
+    'OtherSalesman'=>'跨区业务员',
     'Technician'=>'技术员',
 	'Sign Date'=>'签约日期',
 	'Contract End Date'=>'合同终止日期',
@@ -25,6 +26,17 @@ return array(
 	'Status' => '记录类别',
 	'Status Date'=>'记录日期',
 	'Installation'=>'需安装',
+
+    'Number'=>'服务总次数',
+    'Surplus'=>'剩余次数',
+    'Number edit0'=>'第二次更改服务总次数',
+    'Surplus edit0'=>'第二次更改剩余次数',
+    'Number edit1'=>'第三次更改服务总次数',
+    'Surplus edit1'=>'第三次更改剩余次数',
+    'Number edit2'=>'第四次更改服务总次数',
+    'Surplus edit2'=>'第四次更改剩余次数',
+    'Number edit3'=>'第五次更改服务总次数',
+    'Surplus edit3'=>'第五次更改剩余次数',
 
 	'Service (Before)'=>'服务內容(更改前)',
 	'Paid Amt (Before)'=>'服务金额(更改前)',
@@ -70,7 +82,7 @@ return array(
 	
 	'Type'=>'类别',
 	'Source'=>'接收来源',
-	
+	'othersalesman'=>'跨区业务员',
 	'Resp. Tech.'=>'负责技术员',
 	'Notify Manager'=>'经理知悉',
 	'Schedule Date'=>'安排跟进日期',

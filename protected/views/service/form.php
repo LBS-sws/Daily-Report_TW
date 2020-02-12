@@ -179,6 +179,7 @@ $this->pageTitle=Yii::app()->name . ' - Service Form';
 				</div>
 			</div>
 <?php endif; ?>
+
 			<div class="form-group">
 				<?php echo $form->labelEx($model,(($model->status=='A') ? 'af_service' : 'service'),array('class'=>"col-sm-2 control-label")); ?>
 				<div class="col-sm-7">
@@ -234,6 +235,81 @@ $this->pageTitle=Yii::app()->name . ' - Service Form';
 				</div>
 			</div>
 <?php endif; ?>
+
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'all_number',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-2">
+                    <?php echo $form->numberField($model, 'all_number',
+                        array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+                <?php if (($model->status=='A') || ($model->status=='T')) : ?>
+                <?php echo $form->labelEx($model,'surplus',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-2">
+                    <?php echo $form->numberField($model, 'surplus',
+                        array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+                <?php endif; ?>
+            </div>
+            <?php if ($model->status=='T') : ?>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'all_number_edit0',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-2">
+                    <?php echo $form->numberField($model, 'all_number_edit0',
+                        array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+                    <?php echo $form->labelEx($model,'surplus_edit0',array('class'=>"col-sm-2 control-label")); ?>
+                    <div class="col-sm-2">
+                        <?php echo $form->numberField($model, 'surplus_edit0',
+                            array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                        ); ?>
+                    </div>
+            </div>
+                <div class="form-group">
+                    <?php echo $form->labelEx($model,'all_number_edit1',array('class'=>"col-sm-2 control-label")); ?>
+                    <div class="col-sm-2">
+                        <?php echo $form->numberField($model, 'all_number_edit1',
+                            array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                        ); ?>
+                    </div>
+                    <?php echo $form->labelEx($model,'surplus_edit1',array('class'=>"col-sm-2 control-label")); ?>
+                    <div class="col-sm-2">
+                        <?php echo $form->numberField($model, 'surplus_edit1',
+                            array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                        ); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <?php echo $form->labelEx($model,'all_number_edit2',array('class'=>"col-sm-2 control-label")); ?>
+                    <div class="col-sm-2">
+                        <?php echo $form->numberField($model, 'all_number_edit2',
+                            array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                        ); ?>
+                    </div>
+                    <?php echo $form->labelEx($model,'surplus_edit2',array('class'=>"col-sm-2 control-label")); ?>
+                    <div class="col-sm-2">
+                        <?php echo $form->numberField($model, 'surplus_edit2',
+                            array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                        ); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <?php echo $form->labelEx($model,'all_number_edit3',array('class'=>"col-sm-2 control-label")); ?>
+                    <div class="col-sm-2">
+                        <?php echo $form->numberField($model, 'all_number_edit3',
+                            array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                        ); ?>
+                    </div>
+                    <?php echo $form->labelEx($model,'surplus_edit3',array('class'=>"col-sm-2 control-label")); ?>
+                    <div class="col-sm-2">
+                        <?php echo $form->numberField($model, 'surplus_edit3',
+                            array('size'=>4,'min'=>0,'readonly'=>($model->scenario=='view'))
+                        ); ?>
+                    </div>
+                </div>
+            <?php endif; ?>
 			<div class="form-group">
 				<?php echo $form->labelEx($model,'salesman',array('class'=>"col-sm-2 control-label")); ?>
 				<div class="col-sm-7">
@@ -245,6 +321,17 @@ $this->pageTitle=Yii::app()->name . ' - Service Form';
 					?>
 				</div>
 			</div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'othersalesman',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-7">
+                    <?php
+                    echo $form->textField($model, 'othersalesman',
+                        array('size'=>60,'maxlength'=>1000,'readonly'=>true,
+                            'append'=>TbHtml::button('<span class="fa fa-search"></span> '.Yii::t('service','Salesman'),array('name'=>'btnOtherSalesman','id'=>'btnOtherSalesman','disabled'=>($model->scenario=='view'))),
+                        ));
+                    ?>
+                </div>
+            </div>
             <div class="form-group">
                 <?php echo $form->labelEx($model,'technician',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-7">
@@ -471,6 +558,9 @@ Yii::app()->clientScript->registerScript('lookupService',$js,CClientScript::POS_
 
 $js = Script::genLookupButtonEx('btnSalesman', 'staff', '', 'salesman');
 Yii::app()->clientScript->registerScript('lookupSalesman',$js,CClientScript::POS_READY);
+
+$js = Script::genLookupButtonEx('btnOtherSalesman', 'staff', '', 'othersalesman');
+Yii::app()->clientScript->registerScript('lookupOtherSalesman',$js,CClientScript::POS_READY);
 
 $js = Script::genLookupButtonEx('btnTechnician', 'staff', '', 'technician');
 Yii::app()->clientScript->registerScript('lookupTechnician',$js,CClientScript::POS_READY);

@@ -54,13 +54,15 @@ class LookupController extends Controller
 		$searchx = str_replace("'","\'",$search);
 		$sql = "select id, code, name, cont_name, cont_phone, address from swo_company
 				where (code like '%".$searchx."%' or name like '%".$searchx."%') and city='".$city."'
-			 and name not like '%客户!C%'";
+			and name not like '%客户!C%'";
 		$records = Yii::app()->db->createCommand($sql)->queryAll();
 		if (count($records) > 0) {
 			foreach ($records as $k=>$record) {
-				$result[] = array(
+				$code = $record['code'];
+				$name = $record['name'];
+					$result[] = array(
 						'id'=>$record['id'],
-						'value'=>substr($record['code'].str_repeat(' ',8),0,8).$record['name'],
+						'value'=>substr($code.str_repeat(' ',8),0,8).$name,
 						'contact'=>trim($record['cont_name']).'/'.trim($record['cont_phone']),
 						'address'=>$record['address'],
 					);
@@ -241,4 +243,32 @@ class LookupController extends Controller
 //		echo CHtml::tag( date('Y-m-d H:i:s'));
 //		Yii::app()->end();
 //	}
+
+	protected function detectUTF8($string){
+	        return preg_match('%(?:
+		        [\xC2-\xDF][\x80-\xBF]        # non-overlong 2-byte
+		        |\xE0[\xA0-\xBF][\x80-\xBF]               # excluding overlongs
+		        |[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}      # straight 3-byte
+		        |\xED[\x80-\x9F][\x80-\xBF]               # excluding surrogates
+		        |\xF0[\x90-\xBF][\x80-\xBF]{2}    # planes 1-3
+		        |[\xF1-\xF3][\x80-\xBF]{3}                  # planes 4-15
+		        |\xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
+	        )+%xs', $string);
+	}
+
+	protected function removeNonUtf8($string) {
+		$regex = <<<'END'
+/
+  (
+    (?: [\x00-\x7F]                 # single-byte sequences   0xxxxxxx
+    |   [\xC0-\xDF][\x80-\xBF]      # double-byte sequences   110xxxxx 10xxxxxx
+    |   [\xE0-\xEF][\x80-\xBF]{2}   # triple-byte sequences   1110xxxx 10xxxxxx * 2
+    |   [\xF0-\xF7][\x80-\xBF]{3}   # quadruple-byte sequence 11110xxx 10xxxxxx * 3 
+    ){1,100}                        # ...one or more times
+  )
+| .                                 # anything else
+/x
+END;
+		return preg_replace($regex, '$1', $string);
+	}
 }

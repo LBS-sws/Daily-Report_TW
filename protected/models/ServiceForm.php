@@ -23,7 +23,7 @@ class ServiceForm extends CFormModel
     public $technician;
 	public $sign_dt;
 	public $ctrt_end_dt;
-	public $ctrt_period;
+	public $ctrt_period=12;
 	public $cont_info;
 	public $first_dt;
 	public $first_tech;
@@ -36,12 +36,23 @@ class ServiceForm extends CFormModel
 	public $org_equip_qty = 0;
 	public $rtn_equip_qty = 0;
 	public $city;
-
+	public $surplus=0;
+    public $all_number=0;
+    public $surplus_edit0=0;
+    public $all_number_edit0=0;
+    public $surplus_edit1=0;
+    public $all_number_edit1=0;
+    public $surplus_edit2=0;
+    public $all_number_edit2=0;
+    public $surplus_edit3=0;
+    public $all_number_edit3=0;
+    public $surplus_edit4=0;
+    public $all_number_edit4=0;
 	public $b4_product_id;
 	public $b4_service;
 	public $b4_paid_type;
 	public $b4_amt_paid;
-	
+	public $othersalesman;
 	public $status_desc;
 	public $backlink;
 	
@@ -78,6 +89,7 @@ class ServiceForm extends CFormModel
 			'amt_install'=>Yii::t('service','Install Amt'),
 			'need_install'=>Yii::t('service','Installation'),
 			'salesman'=>Yii::t('service','Salesman'),
+            'othersalesman'=>Yii::t('service','OtherSalesman'),
             'technician'=>Yii::t('service','Technician'),
 			'sign_dt'=>Yii::t('service','Sign Date'),
 			'ctrt_end_dt'=>Yii::t('service','Contract End Date'),
@@ -103,6 +115,16 @@ class ServiceForm extends CFormModel
 			'resume_dt'=>Yii::t('service','Resume Date'),
 			'suspend_dt'=>Yii::t('service','Suspend Date'),
 			'terminate_dt'=>Yii::t('service','Terminate Date'),
+            'all_number'=>Yii::t('service','Number'),
+            'surplus'=>Yii::t('service','Surplus'),
+            'all_number_edit0'=>Yii::t('service','Number edit0'),
+            'surplus_edit0'=>Yii::t('service','Surplus edit0'),
+            'all_number_edit1'=>Yii::t('service','Number edit1'),
+            'surplus_edit1'=>Yii::t('service','Surplus edit1'),
+            'all_number_edit2'=>Yii::t('service','Number edit2'),
+            'surplus_edit2'=>Yii::t('service','Surplus edit2'),
+            'all_number_edit3'=>Yii::t('service','Number edit3'),
+            'surplus_edit3'=>Yii::t('service','Surplus edit3'),
 		);
 	}
 
@@ -117,11 +139,11 @@ class ServiceForm extends CFormModel
 				status, status_desc, company_id, product_id, backlink, fresh, paid_type, city, 
 				b4_product_id, b4_service, b4_paid_type, docType, files, removeFileId, downloadFileId, need_install, no_of_attm','safe'),
 */
-			array('id, technician, cont_info, first_tech, reason, remarks, remarks2, paid_type, nature_type, cust_type, 
-				status, status_desc, company_id, product_id, backlink, fresh, paid_type, city, 
-				b4_product_id, b4_service, b4_paid_type, need_install','safe'),
-			array('files, removeFileId, docMasterId, no_of_attm','safe'), 
-			array('company_name,salesman, service, status_dt','required'),
+			array('id, technician, cont_info, first_tech, reason, remarks,othersalesman, remarks2, paid_type, nature_type, cust_type, 
+				status, status_desc, company_id, product_id, backlink, fresh, paid_type, city, all_number,surplus,all_number_edit0,surplus_edit0,all_number_edit1,surplus_edit1,
+				all_number_edit2,surplus_edit2,all_number_edit3,surplus_edit3,b4_product_id, b4_service, b4_paid_type, need_install','safe'),
+			array('files, removeFileId, docMasterId, no_of_attm','safe'),
+			array('company_name,salesman, service,all_number,surplus, status_dt','required'),
 			array('ctrt_period','numerical','allowEmpty'=>true,'integerOnly'=>true),
 			array('amt_paid, amt_install','numerical','allowEmpty'=>true),
 			array('org_equip_qty, rtn_equip_qty','numerical','allowEmpty'=>true),
@@ -158,6 +180,7 @@ class ServiceForm extends CFormModel
 				$this->b4_amt_paid = $row['b4_amt_paid'];
 				$this->amt_install = $row['amt_install'];
 				$this->salesman = $row['salesman'];
+                $this->othersalesman = $row['othersalesman'];
                 $this->technician = $row['technician'];
 				$this->sign_dt = General::toDate($row['sign_dt']);
 				$this->ctrt_end_dt = General::toDate($row['ctrt_end_dt']);
@@ -175,8 +198,19 @@ class ServiceForm extends CFormModel
 				$this->rtn_equip_qty = $row['rtn_equip_qty'];
 				$this->need_install = $row['need_install'];
 				$this->no_of_attm['service'] = $row['no_of_attm'];
-				$this->city = $row['city'];
-			
+                $this->city = $row['city'];
+                $this->surplus = $row['surplus'];
+                $this->all_number = $row['all_number'];
+                $this->surplus_edit0 = $row['surplus_edit0'];
+                $this->all_number_edit0 = $row['all_number_edit0'];
+                $this->surplus_edit1 = $row['surplus_edit1'];
+                $this->all_number_edit1 = $row['all_number_edit1'];
+                $this->surplus_edit2 = $row['surplus_edit2'];
+                $this->all_number_edit2 = $row['all_number_edit2'];
+                $this->surplus_edit3 = $row['surplus_edit3'];
+                $this->all_number_edit3 = $row['all_number_edit3'];
+//                print_r('<pre>');
+//                print_r($this);exit();
 				break;
 			}
 		}
@@ -214,26 +248,26 @@ class ServiceForm extends CFormModel
 			case 'resume':
 				$sql = "insert into swo_service(
 							company_id, company_name, product_id, service, nature_type, cust_type, 
-							paid_type, amt_paid, amt_install, need_install, salesman,technician, sign_dt, b4_product_id,
+							paid_type, amt_paid, amt_install, need_install, salesman,othersalesman,technician, sign_dt, b4_product_id,
 							b4_service, b4_paid_type, b4_amt_paid, 
 							ctrt_period, cont_info, first_dt, first_tech, reason,
 							status, status_dt, remarks, remarks2, ctrt_end_dt,
 							equip_install_dt, org_equip_qty, rtn_equip_qty, 
-							city, luu, lcu
+							city, luu, lcu,all_number,surplus,all_number_edit0,surplus_edit0,all_number_edit1,surplus_edit1,all_number_edit2,surplus_edit2,all_number_edit3,surplus_edit3
 						) values (
 							:company_id, :company_name, :product_id, :service, :nature_type, :cust_type, 
-							:paid_type, :amt_paid, :amt_install, :need_install, :salesman,:technician, :sign_dt, :b4_product_id,
+							:paid_type, :amt_paid, :amt_install, :need_install, :salesman,:othersalesman,:technician, :sign_dt, :b4_product_id,
 							:b4_service, :b4_paid_type, :b4_amt_paid, 
 							:ctrt_period, :cont_info, :first_dt, :first_tech, :reason,
 							:status, :status_dt, :remarks, :remarks2, :ctrt_end_dt,
 							:equip_install_dt, :org_equip_qty, :rtn_equip_qty, 
-							:city, :luu, :lcu
+							:city, :luu, :lcu,:all_number,:surplus,:all_number_edit0,:surplus_edit0,:all_number_edit1,:surplus_edit1,:all_number_edit2,:surplus_edit2,:all_number_edit3,:surplus_edit3
 						)";
 				$this->execSql($connection,$sql);
 				$this->id = Yii::app()->db->getLastInsertID();
 				break;
 			case 'edit':
-				$sql = "update swo_service set
+				$sql = "update swo_service set                      
 							company_id = :company_id, 
 							company_name = :company_name, 
 							cust_type = :cust_type,
@@ -249,6 +283,7 @@ class ServiceForm extends CFormModel
 							amt_install = :amt_install, 
 							need_install = :need_install,
 							salesman = :salesman, 
+							othersalesman=:othersalesman,
 							technician = :technician,
 							sign_dt = :sign_dt,
 							ctrt_end_dt = :ctrt_end_dt,
@@ -264,6 +299,16 @@ class ServiceForm extends CFormModel
 							equip_install_dt = :equip_install_dt,
 							org_equip_qty = :org_equip_qty,
 							rtn_equip_qty = :rtn_equip_qty,
+							all_number = :all_number, 
+                            surplus = :surplus, 
+                            all_number_edit0 = :all_number_edit0, 
+                            surplus_edit0 = :surplus_edit0, 
+                            all_number_edit1 = :all_number_edit1, 
+                            surplus_edit1 = :surplus_edit1, 
+                            all_number_edit2 = :all_number_edit2, 
+                            surplus_edit2 = :surplus_edit2, 
+                            all_number_edit3 = :all_number_edit3, 
+                            surplus_edit3 = :surplus_edit3, 
 							luu = :luu 
 						where id = :id and city = :city
 						";
@@ -315,6 +360,9 @@ class ServiceForm extends CFormModel
 		if (strpos($sql,':salesman')!==false)
 			$command->bindParam(':salesman',$this->salesman,PDO::PARAM_STR);
 
+        if (strpos($sql,':othersalesman')!==false)
+            $command->bindParam(':othersalesman',$this->othersalesman,PDO::PARAM_STR);
+
         if (strpos($sql,':technician')!==false)
             $command->bindParam(':technician',$this->technician,PDO::PARAM_STR);
 
@@ -330,6 +378,7 @@ class ServiceForm extends CFormModel
 			$cp = General::toMyNumber($this->ctrt_period);
 			$command->bindParam(':ctrt_period',$cp,PDO::PARAM_INT);
 		}
+
 		if (strpos($sql,':cont_info')!==false)
 			$command->bindParam(':cont_info',$this->cont_info,PDO::PARAM_STR);
 		if (strpos($sql,':first_dt')!==false) {
@@ -382,7 +431,38 @@ class ServiceForm extends CFormModel
 			$req = General::toMyNumber($this->rtn_equip_qty);
 			$command->bindParam(':rtn_equip_qty',$req,PDO::PARAM_INT);
 		}
-
+        if (strpos($sql,':all_number')!==false) {
+            $command->bindParam(':all_number',$this->all_number,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':surplus')!==false) {
+            $command->bindParam(':surplus',$this->surplus,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':all_number_edit0')!==false) {
+            $command->bindParam(':all_number_edit0',$this->all_number_edit0,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':surplus_edit0')!==false) {
+            $command->bindParam(':surplus_edit0',$this->surplus_edit0,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':all_number_edit1')!==false) {
+            $command->bindParam(':all_number_edit1',$this->all_number_edit1,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':surplus_edit1')!==false) {
+            $command->bindParam(':surplus_edit1',$this->surplus_edit1,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':all_number_edit2')!==false) {
+            $command->bindParam(':all_number_edit2',$this->all_number_edit2,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':surplus_edit2')!==false) {
+            $command->bindParam(':surplus_edit2',$this->surplus_edit2,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':all_number_edit3')!==false) {
+            $command->bindParam(':all_number_edit3',$this->all_number_edit3,PDO::PARAM_INT);
+        }
+        if (strpos($sql,':surplus_edit3')!==false) {
+            $command->bindParam(':surplus_edit3',$this->surplus_edit3,PDO::PARAM_INT);
+        }
+//        print_r('<pre>');
+//        print_r($this->all_number);exit();
 		$command->execute();
 	}
 	

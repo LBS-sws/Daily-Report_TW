@@ -32,11 +32,11 @@ $this->pageTitle=Yii::app()->name . ' - Customer Form';
 			}
 		?>
 		<?php echo TbHtml::button('<span class="fa fa-reply"></span> '.Yii::t('misc','Back'), array(
-				'submit'=>Yii::app()->createUrl('customer/index'))); 
+				'submit'=>Yii::app()->createUrl('customer/index')));
 		?>
 <?php if ($model->scenario!='view'): ?>
 			<?php echo TbHtml::button('<span class="fa fa-upload"></span> '.Yii::t('misc','Save'), array(
-				'submit'=>Yii::app()->createUrl('customer/save'))); 
+				'submit'=>Yii::app()->createUrl('customer/save')));
 			?>
 <?php endif ?>
 <?php if ($model->scenario=='edit'): ?>
