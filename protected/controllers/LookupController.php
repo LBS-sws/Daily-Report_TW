@@ -62,7 +62,8 @@ class LookupController extends Controller
 				$name = $record['name'];
 					$result[] = array(
 						'id'=>$record['id'],
-						'value'=>substr($code.str_repeat(' ',8),0,8).$name,
+//						'value'=>substr($code.str_repeat(' ',8),0,8).$name,
+						'value'=>$code."\t".$name,
 						'contact'=>trim($record['cont_name']).'/'.trim($record['cont_phone']),
 						'address'=>$record['address'],
 					);
@@ -81,7 +82,8 @@ class LookupController extends Controller
 		$records = Yii::app()->db->createCommand($sql)->queryAll();
 		if (count($records) > 0) {
 			foreach ($records as $k=>$record) {
-				$result[$record['id']] = substr($record['code'].str_repeat(' ',8),0,8).$record['name'];
+//				$result[$record['id']] = substr($record['code'].str_repeat(' ',8),0,8).$record['name'];
+				$result[$record['id']] = $record['code']."\t".$record['name'];
 				$hidden .= TbHtml::hiddenField('otherfld_'.$record['id'].'_contact',trim($record['cont_name']).'/'.trim($record['cont_phone']));
 				$hidden .= TbHtml::hiddenField('otherfld_'.$record['id'].'_address',$record['address']);
 			}
