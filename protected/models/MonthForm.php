@@ -778,6 +778,7 @@ WHERE hdr_id = '".$model['id']."'";
         if(!empty($a7)){
             $arr[] = $a7[0]['email'];
         }
+        $arr[] ='flam@lbsgroup.com.hk';
         $a=General::dedupToEmailList($arr);
         $sql = "select a.year_no, a.month_no, b.id, b.hdr_id, b.data_field, b.data_value, c.name, c.upd_type, c.field_type, b.manual_input , c.excel_row  
 				from swo_monthly_hdr a, swo_monthly_dtl b, swo_monthly_field c 
