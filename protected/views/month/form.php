@@ -108,12 +108,12 @@ $this->pageTitle=Yii::app()->name . ' - Month Report Form';
                     <br/><0% - -14%   :  2
                     <br/>>=0% - 8%   :  3
                     <br/>9% - 14%   :  4
-                    <br/>> 15% :  5
+                    <br/>>= 15% :  5
                     <br/></td><td><?php echo $model->excel['e76'];?></td><td></td></tr>
             <tr><td>傳統服務(IA,IB)新生意年金額橫比增長 （(當月-去年當月）/去年當月)</td><td><?php echo $model->excel['c77'];?></td><td> -15% - -30%    :  1
                     <br/><0% - -14%   :  2
                     <br/>>=0% - 8%   :  3
-                    <br/><br/>9% - 14%   :  4
+                    <br/>9% - 14%   :  4
                     <br/>> 15% :  5 </td><td><?php echo $model->excel['e77'];?></td><td></td></tr>
             <tr><td>傳統服務(IA,IB)新生意合同數量增長（(當月-上月)/上月)</td><td><?php echo $model->excel['c78'];?></td><td>-10% ~ -20% : 1
                     <br/>4% ~ -9% : 2
@@ -255,7 +255,7 @@ $this->pageTitle=Yii::app()->name . ' - Month Report Form';
 
         <table class="tftable3" border="1">
             <tr><td style="width: 10%">營運部</td><td colspan="4"></td><td><?php echo $model->excel['f101'];?></td></tr>
-            <tr><td>整體情況</td><td>新合同7天內安排首次比例 （成功7天首次客戶數目/整體當月新合同數目）</td><td style="width: 10%"><?php echo $model->excel['c102'];?></td><td style="width: 10%">/>95% ~ 100% ： 5
+            <tr><td>整體情況</td><td>新合同7天內安排首次比例 （成功7天首次客戶數目/整體當月新合同數目）</td><td style="width: 10%"><?php echo $model->excel['c102'];?></td><td style="width: 10%">>95% ~ 100% ： 5
                     <br/>  90% ~ 94% ： 4
                     <br/>  85% ~ 89% ： 3
                     <br/>  80% ~ 84% ： 2
