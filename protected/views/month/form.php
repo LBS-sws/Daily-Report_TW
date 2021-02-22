@@ -255,7 +255,7 @@ $this->pageTitle=Yii::app()->name . ' - Month Report Form';
 
         <table class="tftable3" border="1">
             <tr><td style="width: 10%">營運部</td><td colspan="4"></td><td><?php echo $model->excel['f101'];?></td></tr>
-            <tr><td>整體情況</td><td>新合同7天內安排首次比例 （成功7天首次客戶數目/整體當月新合同數目）</td><td style="width: 10%"><?php echo $model->excel['c102'];?></td><td style="width: 10%">>95% ~ 100% ： 5
+            <tr><td>整體情況</td><td>新合同7天內安排首次比例 （成功7天首次客戶數目/整體當月新合同數目）</td><td style="width: 10%"><?php echo $model->excel['c102'];?></td><td style="width: 10%">95% ~ 100% ： 5
                     <br/>  90% ~ 94% ： 4
                     <br/>  85% ~ 89% ： 3
                     <br/>  80% ~ 84% ： 2

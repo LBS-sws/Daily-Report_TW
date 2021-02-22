@@ -206,7 +206,7 @@ $this->pageTitle=Yii::app()->name . ' - Month Report';
 
 
         <tr><td style="width: 13%">营运部</td><td style="width: 20%"></td><?php for ($a=0;$a<count($model->excel);$a++){ echo "<td>".$model->excel[$a]['f101']."</td>";}?><td style="width: 15%"></td></tr>
-        <tr><td>整體情況</td><td>新合同7天內安排首次比例 （成功7天首次客戶數目/整體當月新合同數目）</td><?php for ($a=0;$a<count($model->excel);$a++){ echo "<td>".$model->excel[$a]['c102']."(".$model->excel[$a]['e102'].")</td>";}?><td style="width: 10%">>95% ~ 100% ： 5
+        <tr><td>整體情況</td><td>新合同7天內安排首次比例 （成功7天首次客戶數目/整體當月新合同數目）</td><?php for ($a=0;$a<count($model->excel);$a++){ echo "<td>".$model->excel[$a]['c102']."(".$model->excel[$a]['e102'].")</td>";}?><td style="width: 10%">95% ~ 100% ： 5
                 <br/>  90% ~ 94% ： 4
                 <br/>  85% ~ 89% ： 3
                 <br/>  80% ~ 84% ： 2
