@@ -114,7 +114,7 @@ $this->pageTitle=Yii::app()->name . ' - Month Report Form';
                     <br/><0% - -14%   :  2
                     <br/>>=0% - 8%   :  3
                     <br/>9% - 14%   :  4
-                    <br/>> 15% :  5 </td><td><?php echo $model->excel['e77'];?></td><td></td></tr>
+                    <br/>> =15% :  5 </td><td><?php echo $model->excel['e77'];?></td><td></td></tr>
             <tr><td>傳統服務(IA,IB)新生意合同數量增長（(當月-上月)/上月)</td><td><?php echo $model->excel['c78'];?></td><td>-10% ~ -20% : 1
                     <br/>4% ~ -9% : 2
                     <br/>5% ~ 19% : 3
