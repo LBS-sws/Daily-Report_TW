@@ -507,7 +507,7 @@ class MonthForm extends CFormModel
             $c103=$b57/($b56==0?1:$b56);
             $c104=($b59+$b61)/(($b58+$b60)==0?1:($b58+$b60));
             $c105=0;
-            $c106=$b62/100;
+            $c106=$b62/100;//每月盘点准确度115
             $c107=$b51/($b34==0?1:$b34);
             if($b51==0&&$b34==0){
                 $c107=1;
@@ -1074,6 +1074,9 @@ WHERE hdr_id = '".$model['id']."'";
         }
         elseif (count($model->record)==68){
             $path = Yii::app()->basePath.'/commands/template/m_template_lirun.xlsx';
+        }
+        elseif (count($model->record)==69){
+            $path = Yii::app()->basePath.'/commands/template/m_template_xidi.xlsx';
         }
         else{
             $path = Yii::app()->basePath.'/commands/template/m_template_old.xlsx';
