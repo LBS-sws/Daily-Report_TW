@@ -6,20 +6,21 @@ class RptCustnew extends ReportData2 {
 			'company_name'=>array('label'=>Yii::t('service','Customer'),'width'=>40,'align'=>'L'),
 			'nature'=>array('label'=>Yii::t('customer','Nature'),'width'=>12,'align'=>'L'),
 			'service'=>array('label'=>Yii::t('service','Service'),'width'=>40,'align'=>'L'),
+			'prepay_month'=>array('label'=>Yii::t('service','Prepay Month'),'width'=>10,'align'=>'C'),
 			'amt_month'=>array('label'=>Yii::t('service','Monthly'),'width'=>15,'align'=>'C'),
 			'amt_year'=>array('label'=>Yii::t('service','Yearly'),'width'=>15,'align'=>'C'),
-			'amt_install'=>array('label'=>Yii::t('service','Install Amt'),'width'=>15,'align'=>'C'),
+			'amt_install'=>array('label'=>Yii::t('service','Installation Fee'),'width'=>15,'align'=>'C'),
 			'need_install'=>array('label'=>Yii::t('service','Installation'),'width'=>10,'align'=>'C'),
-			'salesman'=>array('label'=>Yii::t('service','Salesman'),'width'=>20,'align'=>'L'),
+			'salesman'=>array('label'=>Yii::t('service','Resp. Sales'),'width'=>20,'align'=>'L'),
             'othersalesman'=>array('label'=>Yii::t('service','OtherSalesman'),'width'=>20,'align'=>'L'),
 			'sign_dt'=>array('label'=>Yii::t('service','Sign Date'),'width'=>18,'align'=>'C'),
 			'ctrt_period'=>array('label'=>Yii::t('service','Contract Period'),'width'=>10,'align'=>'C'),
 			'ctrt_end_dt'=>array('label'=>Yii::t('service','Contract End Date'),'width'=>18,'align'=>'C'),
 			'cont_info'=>array('label'=>Yii::t('service','Contact'),'width'=>40,'align'=>'L'),
 			'first_dt'=>array('label'=>Yii::t('service','First Service Date'),'width'=>18,'align'=>'C'),
-			'first_tech'=>array('label'=>Yii::t('service','First Technician'),'width'=>30,'align'=>'L'),
+			'first_tech'=>array('label'=>Yii::t('service','First Service Tech.'),'width'=>30,'align'=>'L'),
 			'remarks'=>array('label'=>Yii::t('service','Remarks'),'width'=>40,'align'=>'L'),
-			'equip_install_dt'=>array('label'=>Yii::t('service','Install Date'),'width'=>18,'align'=>'C'),
+			'equip_install_dt'=>array('label'=>Yii::t('service','Installation Date'),'width'=>18,'align'=>'C'),
 			'diff_ctrt_dt'=>array('label'=>Yii::t('service','Diff. btw Contract Date'),'width'=>15,'align'=>'C'),
 			'diff_first_dt'=>array('label'=>Yii::t('service','Diff. btw First Service Date'),'width'=>15,'align'=>'C'),
 		);	
@@ -61,6 +62,7 @@ class RptCustnew extends ReportData2 {
 				$temp['company_name'] = $row['company_name'];
 				$temp['nature'] = $row['nature'];
 				$temp['service'] = $row['service'];
+				$temp['prepay_month'] = $row['prepay_month'];
 				$temp['amt_month'] = number_format(($row['paid_type']=='1'?$row['amt_paid']:
 										($row['paid_type']=='M'?$row['amt_paid']:round($row['amt_paid']/($row['ctrt_period']>0?$row['ctrt_period']:1),2)))
 									,2,'.','');
@@ -80,10 +82,10 @@ class RptCustnew extends ReportData2 {
 				$temp['first_tech'] = $row['first_tech'];
 				$temp['remarks'] = $row['remarks'];
 				$temp['equip_install_dt'] = General::toDate($row['equip_install_dt']);
-				$temp['diff_ctrt_dt'] = (empty($temp['equip_install_dt']) || empty($temp['sign_dt'])) ? '' :
-					(strtotime($row['equip_install_dt'])-strtotime($row['sign_dt']))/86400;
-				$temp['diff_first_dt'] = (empty($temp['sign_dt']) || empty($temp['first_dt'])) ? '' :
-					(strtotime($temp['first_dt'])-strtotime($temp['sign_dt']))/86400;
+				$temp['diff_ctrt_dt'] = (empty($temp['equip_install_dt']) || empty($temp['status_dt'])) ? '' :
+					(strtotime($row['equip_install_dt'])-strtotime($row['status_dt']))/86400;
+				$temp['diff_first_dt'] = (empty($temp['status_dt']) || empty($temp['first_dt'])) ? '' :
+					(strtotime($temp['first_dt'])-strtotime($temp['status_dt']))/86400;
 
 				$this->data[] = $temp;
 			}
