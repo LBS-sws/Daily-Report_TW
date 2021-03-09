@@ -1069,6 +1069,8 @@ WHERE hdr_id = '".$model['id']."'";
         include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
         $objPHPExcel = new PHPExcel;
         $objReader  = PHPExcel_IOFactory::createReader('Excel2007');
+        print_r(count($model->record));
+        exit();
         if(count($model->record)==65){
             $path = Yii::app()->basePath.'/commands/template/m_template_one.xlsx';
         }
