@@ -146,6 +146,123 @@ class ReportH02Form extends CReportForm
                 }
                 $objPHPExcel->getActiveSheet()->getColumnDimension($excel_m[$i])->setWidth(17);
             }
+        }elseif(count($model->five[0])==70){
+            $path = Yii::app()->basePath.'/commands/template/month_more_xidi.xlsx';
+            $objPHPExcel = $objReader->load($path);
+            $excel_m=array('C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+//        foreach ($model->record as $arr ){
+//            $objPHPExcel->getActiveSheet()->setCellValue('B'.$arr['excel_row'], $arr['datavalueold']) ;
+//        }
+            //  $num_rows = $objPHPExcel->getActiveSheet()->getHighestColumn();
+            if($model->ccuser!=1){
+                $objPHPExcel->getActiveSheet()->insertNewColumnBefore($excel_m[1],$model->ccuser-1);
+            }
+
+            for($i=0;$i<$model->ccuser;$i++){
+                foreach ($model->five[$i] as $arr ){
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].$arr['excel_row'], $arr['data_value']) ;
+                }
+                for($a=82;$a<134;$a++){
+//                    if($a!=87&&$a!=95&&$a!=101&&$a!=116&&$a!=123){
+//                        $value=$model->excel[$i]['c'.$a]."(".$model->excel[$i]['e'.$a].")";
+//                        $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].$a, $value) ;
+//                    }
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'82',$model->excel[$i]['c76']."(".$model->excel[$i]['e76'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'83',$model->excel[$i]['c77']."(".$model->excel[$i]['e77'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'84',$model->excel[$i]['c78']."(".$model->excel[$i]['e78'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'85',$model->excel[$i]['c79']."(".$model->excel[$i]['e79'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'86',$model->excel[$i]['c80']."(".$model->excel[$i]['e80'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'87',$model->excel[$i]['c81']."(".$model->excel[$i]['e81'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'88',$model->excel[$i]['c82']."(".$model->excel[$i]['e82'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'89',$model->excel[$i]['c83']."(".$model->excel[$i]['e83'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'90',$model->excel[$i]['c84']."(".$model->excel[$i]['e84'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'91',$model->excel[$i]['c85']."(".$model->excel[$i]['e85'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'92',$model->excel[$i]['c86']."(".$model->excel[$i]['e86'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'94',$model->excel[$i]['c88']."(".$model->excel[$i]['e88'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'95',$model->excel[$i]['c89']."(".$model->excel[$i]['e89'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'96',$model->excel[$i]['c90']."(".$model->excel[$i]['e90'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'97',$model->excel[$i]['c91']."(".$model->excel[$i]['e91'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'98',$model->excel[$i]['c92']."(".$model->excel[$i]['e92'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'99',$model->excel[$i]['c93']."(".$model->excel[$i]['e93'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'100',$model->excel[$i]['c94']."(".$model->excel[$i]['e94'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'102',$model->excel[$i]['c96']."(".$model->excel[$i]['e96'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'103',$model->excel[$i]['c97']."(".$model->excel[$i]['e97'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'107',$model->excel[$i]['c98']."(".$model->excel[$i]['e98'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'108',$model->excel[$i]['c99']."(".$model->excel[$i]['e99'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'109',$model->excel[$i]['c100']."(".$model->excel[$i]['e100'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'111',$model->excel[$i]['c102']."(".$model->excel[$i]['e102'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'112',$model->excel[$i]['c103']."(".$model->excel[$i]['e103'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'113',$model->excel[$i]['c104']."(".$model->excel[$i]['e104'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'114',$model->excel[$i]['c105']."(".$model->excel[$i]['e105'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'115',$model->excel[$i]['c106']."(".$model->excel[$i]['e106'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'116',$model->excel[$i]['c107']."(".$model->excel[$i]['e107'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'117',$model->excel[$i]['c108']."(".$model->excel[$i]['e108'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'118',$model->excel[$i]['c109']."(".$model->excel[$i]['e109'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'119',$model->excel[$i]['c110']."(".$model->excel[$i]['e110'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'120',$model->excel[$i]['c111']."(".$model->excel[$i]['e111'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'121',$model->excel[$i]['c112']."(".$model->excel[$i]['e112'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'122',$model->excel[$i]['c113']."(".$model->excel[$i]['e113'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'123',$model->excel[$i]['c114']."(".$model->excel[$i]['e114'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'124',$model->excel[$i]['c115']."(".$model->excel[$i]['e115'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'126',$model->excel[$i]['c117']."(".$model->excel[$i]['e117'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'127',$model->excel[$i]['c118']."(".$model->excel[$i]['e118'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'128',$model->excel[$i]['c119']."(".$model->excel[$i]['e119'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'129',$model->excel[$i]['c120']."(".$model->excel[$i]['e120'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'130',$model->excel[$i]['c121']."(".$model->excel[$i]['e121'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'131',$model->excel[$i]['c122']."(".$model->excel[$i]['e122'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'133',$model->excel[$i]['c124']."(".$model->excel[$i]['e124'].")") ;
+                    //利润
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'104',$model->excel[$i]['bc102']."(".$model->excel[$i]['be102'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'105',$model->excel[$i]['bc103']."(".$model->excel[$i]['be103'].")") ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'106',$model->excel[$i]['bc104']."(".$model->excel[$i]['be104'].")") ;
+
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'2', $model->year[$i].'/'.$model->month[$i]) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'80', $model->excel[$i]['f74']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'93', $model->excel[$i]['f87']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'101', $model->excel[$i]['f95']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'110', $model->excel[$i]['f101']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'125', $model->excel[$i]['f116']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'81', $model->excel[$i]['f75']) ;
+                }
+                $objPHPExcel->getActiveSheet()->getColumnDimension($excel_m[$i])->setWidth(17);
+            }
+        }elseif(count($model->five[0])==65){
+            $path = Yii::app()->basePath.'/commands/template/month_more_ones.xlsx';
+            $objPHPExcel = $objReader->load($path);
+            $excel_m=array('C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+//        foreach ($model->record as $arr ){
+//            $objPHPExcel->getActiveSheet()->setCellValue('B'.$arr['excel_row'], $arr['datavalueold']) ;
+//        }
+            //  $num_rows = $objPHPExcel->getActiveSheet()->getHighestColumn();
+
+            if($model->ccuser!=1){
+                $objPHPExcel->getActiveSheet()->insertNewColumnBefore($excel_m[1],$model->ccuser-1);
+            }
+
+            for($i=0;$i<$model->ccuser;$i++){
+                foreach ($model->five[$i] as $arr ){
+                    if($arr['excel_row']>59){
+                        $arr['excel_row']=$arr['excel_row']-2;
+                    }
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].$arr['excel_row'], $arr['data_value']) ;
+                }
+                for($a=76;$a<125;$a++){
+                    if($a!=87&&$a!=95&&$a!=101&&$a!=116&&$a!=123){
+                        $value=$model->excel[$i]['c'.$a]."(".$model->excel[$i]['e'.$a].")";
+                        $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].$a, $value) ;
+                    }
+//                    print_r('<pre>');
+//                    print_r( $model->excel);
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'2', $model->year[$i].'/'.$model->month[$i]) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'74', $model->excel[$i]['f74']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'87', $model->excel[$i]['f87']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'95', $model->excel[$i]['f95']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'101', $model->excel[$i]['f101']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'116', $model->excel[$i]['f116']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue($excel_m[$i].'75', $model->excel[$i]['f75']) ;
+                }
+                $objPHPExcel->getActiveSheet()->getColumnDimension($excel_m[$i])->setWidth(17);
+            }
         }else{
             $path = Yii::app()->basePath.'/commands/template/month_more_ones.xlsx';
             $objPHPExcel = $objReader->load($path);
@@ -698,8 +815,8 @@ class ReportH02Form extends CReportForm
                     $c84=$b13/($b14==0?1:$b14);
                     $c85=$b5/($b6==0?1:$b6);
                     $c86=$b19/($b4==0?1:$b4);
-                    $c88=($b20-30000)/30000;
-                    $c89=($b21-30000)/30000;
+                    $c88=($b20-130000)/130000;
+                    $c89=($b21-130000)/130000;
                     $c90=$b21;
                     $c91=$b25/($b5==0?1:$b5);
                     $c92=$b26/($b6==0?1:$b6);
@@ -719,7 +836,7 @@ class ReportH02Form extends CReportForm
                     if($b51==0&&$b34==0){
                         $c107=1;
                     }
-                    $c108=$b48/(($b18==0?1:$b18)/(1500*12));
+                    $c108=$b48/(($b18==0?1:$b18)/(4000*12));
                     $c109=$b49/($b48==0?1:$b48);
                     $c110=$b50;
                     $c111=($b42-$b41)/abs($b41==0?1:$b41);
@@ -731,8 +848,8 @@ class ReportH02Form extends CReportForm
                     $c118=$b65/($b71==0?1:$b71);
                     $c119=$b74/($b73==0?1:$b73);
                     $c120=$b66/($b68==0?1:$b68);
-                    $c121=$b69/(($b68==0?1:$b68)/6);
-                    $c122=$b70/(($b68==0?1:$b68)/30);
+                    $c121=$b69/(($b68==0?1:$b68)/10);
+                    $c122=$b70/(($b68==0?1:$b68)/20);
                     $c123=0;
                     $c124=$b67/($b72==0?1:$b72);
                     //利润的

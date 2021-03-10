@@ -491,8 +491,8 @@ class MonthForm extends CFormModel
             $c84=$b13/($b14==0?1:$b14);
             $c85=$b5/($b6==0?1:$b6);
             $c86=$b19/($b4==0?1:$b4);
-            $c88=($b20-30000)/30000;
-            $c89=($b21-30000)/30000;
+            $c88=($b20-130000)/130000;
+            $c89=($b21-130000)/130000;
             $c90=$b21;
             $c91=$b25/($b5==0?1:$b5);
             $c92=$b26/($b6==0?1:$b6);
@@ -512,7 +512,7 @@ class MonthForm extends CFormModel
             if($b51==0&&$b34==0){
                 $c107=1;
             }
-            $c108=$b48/(($b18==0?1:$b18)/(1500*12));
+            $c108=$b48/(($b18==0?1:$b18)/(4000*12));
             $c109=$b49/($b48==0?1:$b48);
             $c110=$b50;
             $c111=($b42-$b41)/abs($b41==0?1:$b41);
@@ -524,8 +524,8 @@ class MonthForm extends CFormModel
             $c118=$b65/($b71==0?1:$b71);
             $c119=$b74/($b73==0?1:$b73);
             $c120=$b66/($b68==0?1:$b68);
-            $c121=$b69/(($b68==0?1:$b68)/6);
-            $c122=$b70/(($b68==0?1:$b68)/30);
+            $c121=$b69/(($b68==0?1:$b68)/10);
+            $c122=$b70/(($b68==0?1:$b68)/20);
             $c123=0;
             $c124=$b67/($b72==0?1:$b72);
             //利润的
@@ -1069,15 +1069,13 @@ WHERE hdr_id = '".$model['id']."'";
         include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
         $objPHPExcel = new PHPExcel;
         $objReader  = PHPExcel_IOFactory::createReader('Excel2007');
-        print_r(count($model->record));
-        exit();
         if(count($model->record)==65){
             $path = Yii::app()->basePath.'/commands/template/m_template_one.xlsx';
         }
         elseif (count($model->record)==68){
             $path = Yii::app()->basePath.'/commands/template/m_template_lirun.xlsx';
         }
-        elseif (count($model->record)==69){
+        elseif (count($model->record)==70){
             $path = Yii::app()->basePath.'/commands/template/m_template_xidi.xlsx';
         }
         else{
