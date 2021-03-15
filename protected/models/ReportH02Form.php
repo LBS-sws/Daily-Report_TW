@@ -556,7 +556,7 @@ class ReportH02Form extends CReportForm
                     $f116=round($e122+$e117+$e118+$e119+$e120+$e121+$e124,2);
                     $f74=round(($f75+$f87+$f95+$f101+$f116)/190*100,2);
                 }
-                elseif (!empty($rows[67])){
+                elseif (count($rows)==68){
                     $b3=intval($rows[0]['data_value']);
                     $b4=intval($rows[1]['data_value']);
                     $b5=intval($rows[2]['data_value']);
