@@ -180,13 +180,13 @@ $this->pageTitle=Yii::app()->name . ' - Month Report Form';
                     <br/>  30% - 69% : 4
                     <br/>  10% - 29%：3</td><td><?php echo $model->excel['e89'];?></td><td></td></tr>
             <tr><td>上月技術員最低生意額技術員金額</td><td><?php echo  $model->excel['c90'];?></td><td>仅供参考，不计算分数</td><td><?php echo $model->excel['e90'];?></td><td></td></tr>
-            <tr><td rowspan="2">技術員成本</td><td>技術員用料比例 清潔（技術員領貨金額/當月生意額）</td><td><?php echo  $model->excel['c91'];?></td><td><=10% : 5
+            <tr><td rowspan="2">技術員成本</td><td>技術員用料比例 清潔（技術員領貨金額/當月IA生意額）</td><td><?php echo  $model->excel['c91'];?></td><td><=10% : 5
                     <br/>    11% ~ 15% : 4
                     <br/>    16% ~ 20% : 3
                     <br/>    21% ~ 25% : 2
                     <br/>    26% ~ 30% : 1
                     <br/>    >31% : 0</td><td><?php echo $model->excel['e91'];?></td><td></td></tr>
-            <tr><td>技術員用料比例 滅蟲（技術員領貨金額/當月生意額）</td><td><?php echo  $model->excel['c92'];?></td><td><=5% : 5
+            <tr><td>技術員用料比例 滅蟲（技術員領貨金額/當月IB生意額）</td><td><?php echo  $model->excel['c92'];?></td><td><=5% : 5
                     <br/>  6% ~ 10% : 4
                     <br/>  11% ~ 15% : 3
                     <br/> 16% ~ 20% : 2
@@ -206,7 +206,7 @@ $this->pageTitle=Yii::app()->name . ' - Month Report Form';
 
         <table class="tftable2" border="1">
             <tr><td style="width: 10%">財務部</td><td colspan="4"></td><td><?php echo $model->excel['f95'];?></td></tr>
-            <tr><td rowspan="2">財政狀況</td><td>毛利率 （當月生意額 - 材料訂購 - 技術員工資）/當月生意額</td><td style="width: 10%"><?php echo $model->excel['c96'];?></td><td style="width: 10%">>=55% : 5
+            <tr><td rowspan="2">財政狀況</td><td>IA,IB毛利率 （當月生意額 - 材料訂購 - 技術員工資）/當月IA,IB生意額</td><td style="width: 10%"><?php echo $model->excel['c96'];?></td><td style="width: 10%">>=55% : 5
                     <br/>  50% ~ 54% : 4
                     <br/> 45% ~ 49% : 3
                     <br/> 40% ~ 44% : 2
