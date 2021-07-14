@@ -233,11 +233,23 @@ $('table').on('click','#btnDelRow', function() {
 	";
 Yii::app()->clientScript->registerScript('removeRow',$js,CClientScript::POS_READY);
 
+	switch(Yii::app()->language) {
+		case 'zh_cn': $lang = 'zh-CN'; break;
+		case 'zh_tw': $lang = 'zh-TW'; break;
+		default: $lang = Yii::app()->language;
+	}
+	$disabled = ($model->scenario!='view') ? 'false' : 'true';
+
 	$js = "
 $(document).ready(function(){
 	var ct = $('#tblDetail tr').eq(1).html();
 	$('#dtltemplate').attr('value',ct);
 	$('.deadline').datepicker({autoclose: true, format: 'yyyy/mm/dd'});
+	$('.select2').select2({
+		tags: false,
+		language: '$lang',
+		disabled: $disabled,
+	});
 });
 
 $('#btnAddRow').on('click',function() {
@@ -273,6 +285,11 @@ $('#btnAddRow').on('click',function() {
 			var topos = $('#'+nid).position().top;
 			$('#tbl_detail').scrollTop(topos);
 		}
+		$('.select2').select2({
+			tags: false,
+			language: '$lang',
+			disabled: $disabled,
+		});
 	}
 });
 	";
