@@ -909,12 +909,37 @@ class MonthForm extends CFormModel
         $sqla="select * from swo_monthly_comment where hdr_id='".$id."'";
         $ros = Yii::app()->db->createCommand($sqla)->queryAll();
         if(empty($ros)){
+/*
             $in="insert into swo_monthly_comment(hdr_id,market,legwork,finance,service,personnel,other,luu,lcu) values('".$id."','".$market."','".$legwork."','".$finance."','".$service."','".$personnel."','".$other."','".$user."','".$user."')";
+*/
+            $in="insert into swo_monthly_comment(hdr_id,market,legwork,finance,service,personnel,other,luu,lcu) values(:id,:market,:legwork,:finance,:service,:personnel,:other,:user,:user)";
         }else{
+/*
         $in="UPDATE swo_monthly_comment SET market = '".$market."',legwork = '".$legwork."',service = '".$service."',personnel = '".$personnel."',finance = '".$finance."',other = '".$other."'
 WHERE hdr_id = '".$model['id']."'";
+*/
+			$in="UPDATE swo_monthly_comment SET market=:market,legwork=:legwork,service=:service,personnel=:personnel,finance=:finance,other=:other WHERE hdr_id=:id";
         }
-        $int = Yii::app()->db->createCommand($in)->execute();
+//        $int = Yii::app()->db->createCommand($in)->execute();
+		$command=$connection->createCommand($sql);		
+		if (strpos($sql,':id')!==false)
+			$command->bindParam(':id',$id,PDO::PARAM_INT);
+		if (strpos($sql,':market')!==false)
+			$command->bindParam(':market',$market,PDO::PARAM_STR);
+		if (strpos($sql,':legwork')!==false)
+			$command->bindParam(':legwork',$legwork,PDO::PARAM_STR);
+		if (strpos($sql,':service')!==false)
+			$command->bindParam(':service',$service,PDO::PARAM_STR);
+		if (strpos($sql,':personnel')!==false)
+			$command->bindParam(':personnel',$personnel,PDO::PARAM_STR);
+		if (strpos($sql,':finance')!==false)
+			$command->bindParam(':finance',$finance,PDO::PARAM_STR);
+		if (strpos($sql,':other')!==false)
+			$command->bindParam(':other',$other,PDO::PARAM_STR);
+		if (strpos($sql,':user')!==false)
+			$command->bindParam(':user',$user,PDO::PARAM_STR);
+		$command->execute();
+		
         $suffix = Yii::app()->params['envSuffix'];
         $user = Yii::app()->user->id;
         $sql = "select approver_type, username from account$suffix.acc_approver where city='$city'";
