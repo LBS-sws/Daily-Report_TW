@@ -921,7 +921,7 @@ WHERE hdr_id = '".$model['id']."'";
 			$in="UPDATE swo_monthly_comment SET market=:market,legwork=:legwork,service=:service,personnel=:personnel,finance=:finance,other=:other WHERE hdr_id=:id";
         }
 //        $int = Yii::app()->db->createCommand($in)->execute();
-		$command=Yii::app()->db->createCommand($sql);		
+		$command=Yii::app()->db->createCommand($in);		
 		if (strpos($sql,':id')!==false)
 			$command->bindParam(':id',$id,PDO::PARAM_INT);
 		if (strpos($sql,':market')!==false)
