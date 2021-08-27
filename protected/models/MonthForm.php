@@ -922,21 +922,21 @@ WHERE hdr_id = '".$model['id']."'";
         }
 //        $int = Yii::app()->db->createCommand($in)->execute();
 		$command=Yii::app()->db->createCommand($in);		
-		if (strpos($sql,':id')!==false)
+		if (strpos($in,':id')!==false)
 			$command->bindParam(':id',$id,PDO::PARAM_INT);
-		if (strpos($sql,':market')!==false)
+		if (strpos($in,':market')!==false)
 			$command->bindParam(':market',$market,PDO::PARAM_STR);
-		if (strpos($sql,':legwork')!==false)
+		if (strpos($in,':legwork')!==false)
 			$command->bindParam(':legwork',$legwork,PDO::PARAM_STR);
-		if (strpos($sql,':service')!==false)
+		if (strpos($in,':service')!==false)
 			$command->bindParam(':service',$service,PDO::PARAM_STR);
-		if (strpos($sql,':personnel')!==false)
+		if (strpos($in,':personnel')!==false)
 			$command->bindParam(':personnel',$personnel,PDO::PARAM_STR);
-		if (strpos($sql,':finance')!==false)
+		if (strpos($in,':finance')!==false)
 			$command->bindParam(':finance',$finance,PDO::PARAM_STR);
-		if (strpos($sql,':other')!==false)
+		if (strpos($in,':other')!==false)
 			$command->bindParam(':other',$other,PDO::PARAM_STR);
-		if (strpos($sql,':user')!==false)
+		if (strpos($in,':user')!==false)
 			$command->bindParam(':user',$user,PDO::PARAM_STR);
 		$command->execute();
 		
