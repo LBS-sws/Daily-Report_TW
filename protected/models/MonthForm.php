@@ -65,6 +65,7 @@ class MonthForm extends CFormModel
 				order by c.excel_row
 			";
         $rowss = Yii::app()->db->createCommand($sql)->queryAll();
+		$thisYear = rowss?rowss[0]["year_no"]:2021;
 
         $sql="select b.month_no, c.excel_row, a.data_value, c.field_type ,c.name
                     from 
@@ -217,7 +218,11 @@ class MonthForm extends CFormModel
             $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
             $e107=($c107>0.95?5:($c107>0.9?4:($c107>0.85?3:($c107>0.8?2:($c107>=0.75?1:0)))));
             $e108=($c108>0.9?5:($c108>0.7?4:($c108>0.5?3:($c108>0.3?2:($c108>0.1?1:0)))));
-            $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			if(thisYear>=2022){
+				$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+			}else{
+				$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			}
             $e110='NIL';
             $e111=($c111>0.05?0:($c111>0?1:($c111>-0.1?2:($c111>-0.2?3:($c111>-0.3?4:5)))));
             $e112=($c112>0.95?5:($c112>0.9?4:($c112>0.85?3:($c112>0.8?2:($c112>=0.75?1:0)))));
@@ -389,7 +394,11 @@ class MonthForm extends CFormModel
             $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
             $e107=($c107>=0.96?5:($c107>=0.91?4:($c107>=0.86?3:($c107>=0.81?2:($c107>=0.76?1:0)))));
             $e108=($c108>=0.9?5:($c108>=0.7?4:($c108>=0.5?3:($c108>=0.3?2:($c108>=0.1?1:0)))));
-            $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			if(thisYear>=2022){
+				$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+			}else{
+				$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			}
             $e110='NIL';
             $e111=($c111>=0.06?0:($c111>0?1:($c111>=-0.04?2:($c111>=-0.09?3:($c111>=-0.14?4:5)))));
             $e112=($c112>0.95?5:($c112>0.9?4:($c112>0.85?3:($c112>0.8?2:($c112>=0.75?1:0)))));
@@ -566,7 +575,11 @@ class MonthForm extends CFormModel
             $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
             $e107=($c107>=0.96?5:($c107>=0.91?4:($c107>=0.86?3:($c107>=0.81?2:($c107>=0.76?1:0)))));
             $e108=($c108>=0.9?5:($c108>=0.7?4:($c108>=0.5?3:($c108>=0.3?2:($c108>=0.1?1:0)))));
-            $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			if(thisYear>=2022){
+				$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+			}else{
+				$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			}
             $e110='NIL';
             $e111=($c111>=0.06?0:($c111>=0?1:($c111>=-0.04?2:($c111>=-0.09?3:($c111>=-0.14?4:5)))));
             $e112=($c112>=0.95?5:($c112>=0.9?4:($c112>=0.85?3:($c112>=0.8?2:($c112>=0.75?1:0)))));
@@ -728,7 +741,11 @@ class MonthForm extends CFormModel
             $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
             $e107=($c107>0.95?5:($c107>0.9?4:($c107>0.85?3:($c107>0.8?2:($c107>=0.75?1:0)))));
             $e108=($c108>0.9?5:($c108>0.7?4:($c108>0.5?3:($c108>0.3?2:($c108>0.1?1:0)))));
-            $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			if(thisYear>=2022){
+				$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+			}else{
+				$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+			}
             $e110='NIL';
             $e111=($c111>0.05?0:($c111>0?1:($c111>-0.1?2:($c111>-0.2?3:($c111>-0.3?4:5)))));
             $e112=($c112>0.95?5:($c112>0.9?4:($c112>0.85?3:($c112>0.8?2:($c112>=0.75?1:0)))));
@@ -856,6 +873,17 @@ class MonthForm extends CFormModel
         $this->excel['f101']=$f101;
         $this->excel['f116']=$f116;
         $this->excel['f75']=$f75;
+
+        //為了以後的統計使用 - 開始（由於不知道如何修改上面的計算，把結果保存到數據庫）
+        Yii::app()->db->createCommand()->update("swo_monthly_hdr",array(
+            'f74'=>$f75,
+            'f86'=>$f87,
+            'f94'=>$f95,
+            'f100'=>$f101,
+            'f115'=>$f116,
+            'f73'=>$f74
+        ),"id=".$index);
+        //為了以後的統計使用 - 結束
 
         if (count($rowss) > 0) {
             $hid = 0;
@@ -1088,6 +1116,7 @@ WHERE hdr_id = '".$model['id']."'";
     */
 
     public function retrieveDatas($model){
+		$yearStr = $model->year_no>=2022?'_2022':'';
         Yii::$enableIncludePath = false;
         $phpExcelPath = Yii::getPathOfAlias('ext.phpexcel');
         spl_autoload_unregister(array('YiiBase','autoload'));
@@ -1095,16 +1124,16 @@ WHERE hdr_id = '".$model['id']."'";
         $objPHPExcel = new PHPExcel;
         $objReader  = PHPExcel_IOFactory::createReader('Excel2007');
         if(count($model->record)==65){
-            $path = Yii::app()->basePath.'/commands/template/m_template_one.xlsx';
+            $path = Yii::app()->basePath."/commands/template/m_template_one{$yearStr}.xlsx";
         }
         elseif (count($model->record)==68){
-            $path = Yii::app()->basePath.'/commands/template/m_template_lirun.xlsx';
+            $path = Yii::app()->basePath."/commands/template/m_template_lirun{$yearStr}.xlsx";
         }
         elseif (count($model->record)==70){
-            $path = Yii::app()->basePath.'/commands/template/m_template_xidi.xlsx';
+            $path = Yii::app()->basePath."/commands/template/m_template_xidi{$yearStr}.xlsx";
         }
         else{
-            $path = Yii::app()->basePath.'/commands/template/m_template_old.xlsx';
+            $path = Yii::app()->basePath."/commands/template/m_template_old{$yearStr}.xlsx";
         }
 
         $objPHPExcel = $objReader->load($path);
