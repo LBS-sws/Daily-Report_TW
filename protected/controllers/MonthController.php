@@ -28,13 +28,21 @@ class MonthController extends Controller
 				'expression'=>array('MonthController','allowReadWrite'),
 			),
 			array('allow', 
-				'actions'=>array('index','view','xiazai','summarize'),
+				'actions'=>array('index','view','xiazai','summarize','test'),
 				'expression'=>array('MonthController','allowReadOnly'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionTest($year=0)
+	{
+		$model = new MonthList;
+		$year = empty($year)||!is_numeric($year)?date("Y"):$year;
+		$model->testAll($year);
+		Yii::app()->end();
 	}
 
 	public function actionIndex($pageNum=0) 

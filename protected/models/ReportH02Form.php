@@ -60,6 +60,7 @@ class ReportH02Form extends CReportForm
     }
 
     public function retrieveXiaZai($model){
+		$yearStr = $model['_scenario']['end_dt']>=2022?'_2022':'';
         Yii::$enableIncludePath = false;
         $phpExcelPath = Yii::getPathOfAlias('ext.phpexcel');
         spl_autoload_unregister(array('YiiBase','autoload'));
@@ -67,7 +68,7 @@ class ReportH02Form extends CReportForm
         $objPHPExcel = new PHPExcel;
         $objReader  = PHPExcel_IOFactory::createReader('Excel2007');
         if(count($model->five[0])==68){
-            $path = Yii::app()->basePath.'/commands/template/month_more_lirun.xlsx';
+            $path = Yii::app()->basePath."/commands/template/month_more_lirun{$yearStr}.xlsx";
             $objPHPExcel = $objReader->load($path);
             $excel_m=array('C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 //        foreach ($model->record as $arr ){
@@ -147,7 +148,7 @@ class ReportH02Form extends CReportForm
                 $objPHPExcel->getActiveSheet()->getColumnDimension($excel_m[$i])->setWidth(17);
             }
         }elseif(count($model->five[0])==70){
-            $path = Yii::app()->basePath.'/commands/template/month_more_xidi.xlsx';
+            $path = Yii::app()->basePath."/commands/template/month_more_xidi{$yearStr}.xlsx";
             $objPHPExcel = $objReader->load($path);
             $excel_m=array('C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 //        foreach ($model->record as $arr ){
@@ -227,7 +228,7 @@ class ReportH02Form extends CReportForm
                 $objPHPExcel->getActiveSheet()->getColumnDimension($excel_m[$i])->setWidth(17);
             }
         }elseif(count($model->five[0])==65){
-            $path = Yii::app()->basePath.'/commands/template/month_more_ones.xlsx';
+            $path = Yii::app()->basePath."/commands/template/month_more_ones{$yearStr}.xlsx";
             $objPHPExcel = $objReader->load($path);
             $excel_m=array('C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 //        foreach ($model->record as $arr ){
@@ -264,7 +265,7 @@ class ReportH02Form extends CReportForm
                 $objPHPExcel->getActiveSheet()->getColumnDimension($excel_m[$i])->setWidth(17);
             }
         }else{
-            $path = Yii::app()->basePath.'/commands/template/month_more_ones.xlsx';
+            $path = Yii::app()->basePath."/commands/template/month_more_ones{$yearStr}.xlsx";
             $objPHPExcel = $objReader->load($path);
             $excel_m=array('C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 //        foreach ($model->record as $arr ){
@@ -362,7 +363,7 @@ class ReportH02Form extends CReportForm
         $sum=count($month_arr);//获得个数
         $arr=array();
         for($i=0;$i<count($month_arr);$i++){
-            $sql= "select b.month_no, c.excel_row, a.data_value, c.field_type,c.name
+            $sql= "select b.year_no,b.month_no, c.excel_row, a.data_value, c.field_type,c.name
 				from
 					swo_monthly_dtl a, swo_monthly_hdr b, swo_monthly_field c
 				where
@@ -375,6 +376,7 @@ class ReportH02Form extends CReportForm
 				order by b.month_no, c.excel_row
 			";
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
+			$thisYear = $rows?$rows[0]["year_no"]:2021;
             if(empty($rows)){
               $arr="";
             }
@@ -535,7 +537,11 @@ class ReportH02Form extends CReportForm
                     $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
                     $e107=($c107>0.95?5:($c107>0.9?4:($c107>0.85?3:($c107>0.8?2:($c107>=0.75?1:0)))));
                     $e108=($c108>0.9?5:($c108>0.7?4:($c108>0.5?3:($c108>0.3?2:($c108>0.1?1:0)))));
-                    $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					if($thisYear>=2022){
+						$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+					}else{
+						$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					}
                     $e110='NIL';
                     $e111=($c111>0.05?0:($c111>0?1:($c111>-0.1?2:($c111>-0.2?3:($c111>-0.3?4:5)))));
                     $e112=($c112>0.95?5:($c112>0.9?4:($c112>0.85?3:($c112>0.8?2:($c112>=0.75?1:0)))));
@@ -708,7 +714,11 @@ class ReportH02Form extends CReportForm
                     $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
                     $e107=($c107>=0.96?5:($c107>=0.91?4:($c107>=0.86?3:($c107>=0.81?2:($c107>=0.76?1:0)))));
                     $e108=($c108>=0.9?5:($c108>=0.7?4:($c108>=0.5?3:($c108>=0.3?2:($c108>=0.1?1:0)))));
-                    $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					if($thisYear>=2022){
+						$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+					}else{
+						$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					}
                     $e110='NIL';
                     $e111=($c111>=0.06?0:($c111>0?1:($c111>=-0.04?2:($c111>=-0.09?3:($c111>=-0.14?4:5)))));
                     $e112=($c112>0.95?5:($c112>0.9?4:($c112>0.85?3:($c112>0.8?2:($c112>=0.75?1:0)))));
@@ -890,7 +900,11 @@ class ReportH02Form extends CReportForm
                     $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
                     $e107=($c107>=0.96?5:($c107>=0.91?4:($c107>=0.86?3:($c107>=0.81?2:($c107>=0.76?1:0)))));
                     $e108=($c108>=0.9?5:($c108>=0.7?4:($c108>=0.5?3:($c108>=0.3?2:($c108>=0.1?1:0)))));
-                    $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					if($thisYear>=2022){
+						$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+					}else{
+						$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					}
                     $e110='NIL';
                     $e111=($c111>=0.06?0:($c111>=0?1:($c111>=-0.04?2:($c111>=-0.09?3:($c111>=-0.14?4:5)))));
                     $e112=($c112>=0.95?5:($c112>=0.9?4:($c112>=0.85?3:($c112>=0.8?2:($c112>=0.75?1:0)))));
@@ -1054,7 +1068,11 @@ class ReportH02Form extends CReportForm
                     $e106=($c106>1.08?0:($c106>1.04?1:($c106>1?3:($c106>0.96?5:($c106>0.92?3:($c106>0.88?1:0))))));
                     $e107=($c107>0.95?5:($c107>0.9?4:($c107>0.85?3:($c107>0.8?2:($c107>=0.75?1:0)))));
                     $e108=($c108>0.9?5:($c108>0.7?4:($c108>0.5?3:($c108>0.3?2:($c108>0.1?1:0)))));
-                    $e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					if($thisYear>=2022){
+						$e109=($c109>0.2?1:($c109>0.1?3:($c109>=0?5:0)));
+					}else{
+						$e109=($c109>0.2?3:($c109>0.1?5:($c109>=0?1:0)));
+					}
                     $e110='NIL';
                     $e111=($c111>0.05?0:($c111>0?1:($c111>-0.1?2:($c111>-0.2?3:($c111>-0.3?4:5)))));
                     $e112=($c112>0.95?5:($c112>0.9?4:($c112>0.85?3:($c112>0.8?2:($c112>=0.75?1:0)))));

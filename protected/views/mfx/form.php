@@ -245,10 +245,17 @@ $this->pageTitle=Yii::app()->name . ' - Month Report';
                 <br/> 30% ~ 49% : 2
                 <br/> 10% ~ 29% : 1
                 <br/> <9% : 0</td> </tr>
+<?php if ($model->scenario['end_dt']>=2022): ?>
+        <tr><td>質檢問題客戶數量比例
+                <br/> （問題客戶 ： 質檢拜訪客戶分數低於70分。問題客戶/當月質檢拜訪客戶 = 質檢問題客戶數量比例）</td><?php for ($a=0;$a<count($model->excel);$a++){ echo "<td>".$model->excel[$a]['c109']."(".$model->excel[$a]['e109'].")</td>";}?><td>>20% : 1
+                <br/> 10% ~ 19% : 3
+                <br/>  0% ~ 9% : 5</td> </tr>
+<?php else:?>
         <tr><td>質檢問題客戶數量比例
                 <br/> （問題客戶 ： 質檢拜訪客戶分數低於70分。問題客戶/當月質檢拜訪客戶 = 質檢問題客戶數量比例）</td><?php for ($a=0;$a<count($model->excel);$a++){ echo "<td>".$model->excel[$a]['c109']."(".$model->excel[$a]['e109'].")</td>";}?><td>>20% : 3
                 <br/> 10% ~ 19% : 5
                 <br/>  0% ~ 9% : 1</td> </tr>
+<?php endif ?>
         <tr><td>表現滿意技術員 (質檢拜訪表平均分數最高同事）</td><?php for ($a=0;$a<count($model->excel);$a++){ echo "<td>".$model->excel[$a]['c110']."(".$model->excel[$a]['e110'].")</td>";}?><td>仅供参考，不计算分数</td> </tr>
         <tr><td rowspan="5">客訴處理</td><td>當月客訴數目比較（當月客訴數目 - 上月客訴數目 / 上月客訴數目）</td><?php for ($a=0;$a<count($model->excel);$a++){ echo "<td>".$model->excel[$a]['c111']."(".$model->excel[$a]['e111'].")</td>";}?><td>< -15% : 5
                 <br/>  -10% ~ -14% : 4
