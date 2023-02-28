@@ -85,7 +85,7 @@ class MyExcel {
 		}
 		$this->setReportFormat();
 		switch ($this->report_id){
-            case "RptSummarySC"://ÌØ±ð´¦Àí£¨¿Í»§·þÎñÍ³¼Æ±¨±í£©
+            case "RptSummarySC"://ç‰¹åˆ«å¤„ç†ï¼ˆå®¢æˆ·æœåŠ¡ç»Ÿè®¡æŠ¥è¡¨ï¼‰
                 $this->outHeader($sheetid);
                 $this->outDetailForSC($data);
                 break;
@@ -226,18 +226,18 @@ class MyExcel {
 	
 	protected function outDetailForSC($data) {
 	    $countRowArr = array();
-        $this->setCellValue("A",$this->current_row,"Ç©µ¥Çé¿ö");
+        $this->setCellValue("A",$this->current_row,"ç­¾å•æƒ…å†µ");
         $this->objPHPExcel->getActiveSheet()->mergeCells("A".$this->current_row.':'."H".$this->current_row);
-        $this->setCellValue("I",$this->current_row,"ÐÂÔö¿Í»§£¨·þÎñ£©");
+        $this->setCellValue("I",$this->current_row,"æ–°å¢žå®¢æˆ·ï¼ˆæœåŠ¡ï¼‰");
         $this->objPHPExcel->getActiveSheet()->mergeCells("I".$this->current_row.':'."L".$this->current_row);
-        $this->setCellValue("M",$this->current_row,"ÐÂÔö¿Í»§£¨²úÆ·£©");
+        $this->setCellValue("M",$this->current_row,"æ–°å¢žå®¢æˆ·ï¼ˆäº§å“ï¼‰");
         $this->objPHPExcel->getActiveSheet()->mergeCells("M".$this->current_row.':'."N".$this->current_row);
         $this->setHeaderStyleTwo("A{$this->current_row}:H".($this->current_row+1),"D8E4BC");
         $this->setHeaderStyleTwo("I{$this->current_row}:L".($this->current_row+1),"C5D9F1");
         $this->setHeaderStyleTwo("M{$this->current_row}:N".($this->current_row+1),"F8E57F");
         $this->current_row++;
         $this->objPHPExcel->getActiveSheet()->freezePane('B7');
-        $heardArr = array("RMB","ÐÂÔö·þÎñ","ÐÂÔö£¨²úÆ·£©","ÖÕÖ¹·þÎñ","»Ö¸´·þÎñ","ÔÝÍ£·þÎñ","¸ü¸Ä·þÎñ","¾»Ôö³¤","³¤Ô¼£¨>=12ÔÂ£©","¶ÌÔ¼","²ÍÒû¿Í»§","·Ç²ÍÒû¿Í»§","²ÍÒû¿Í»§","·Ç²ÍÒû¿Í»§");
+        $heardArr = array("RMB","æ–°å¢žæœåŠ¡","æ–°å¢žï¼ˆäº§å“ï¼‰","ç»ˆæ­¢æœåŠ¡","æ¢å¤æœåŠ¡","æš‚åœæœåŠ¡","æ›´æ”¹æœåŠ¡","å‡€å¢žé•¿","é•¿çº¦ï¼ˆ>=12æœˆï¼‰","çŸ­çº¦","é¤é¥®å®¢æˆ·","éžé¤é¥®å®¢æˆ·","é¤é¥®å®¢æˆ·","éžé¤é¥®å®¢æˆ·");
         foreach ($heardArr as $key=>$heardStr){
             $this->fillHeaderCell($key, $this->current_row, $heardStr,17);
         }
@@ -253,7 +253,7 @@ class MyExcel {
                 if(!empty($regionList["list"])){
                     foreach ($regionList["list"] as $cityList){
                         foreach ($bodyKey as $key=>$keyStr){
-                            if($keyStr=="num_growth"){//¾»Ôö³¤
+                            if($keyStr=="num_growth"){//å‡€å¢žé•¿
                                 $text = "=SUM(B{$this->current_row}:G{$this->current_row})";
                             }else{
                                 $text = key_exists($keyStr,$cityList)?$cityList[$keyStr]:0;
@@ -264,7 +264,7 @@ class MyExcel {
                         $this->current_row++;
                     }
                     $endNum = $this->current_row-1;
-                    //µØÇø×Ü½á
+                    //åœ°åŒºæ€»ç»“
                     $countRowArr[]=$this->current_row;
                     foreach ($bodyKey as $key=>$keyStr){
                         $column1 = $this->getColumn($key);
@@ -288,12 +288,12 @@ class MyExcel {
                     $this->current_row++;
                 }
             }
-            //ËùÓÐ×Ü¼Æ
+            //æ‰€æœ‰æ€»è®¡
             $this->current_row++;
             foreach ($bodyKey as $key=>$keyStr){
                 $column1 = $this->getColumn($key);
                 if($key==0){
-                    $text = "×Ü¼Æ";
+                    $text = "æ€»è®¡";
                 }else{
                     $text = "=";
                     if(!empty($countRowArr)){

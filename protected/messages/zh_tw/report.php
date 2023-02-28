@@ -18,6 +18,7 @@ return array(
 'Feedback List Report'=>'經理回饋列表',
 'Monthly Report'=>'月報表',
 'Comprehensive data comparative analysis'=>'綜合數據對比分析',
+    'Summary Service Cases Report'=>'生意額數據匯總表',
 'City'=>'地區',
 'Type'=>'類別',
 'Year'=>'年',
