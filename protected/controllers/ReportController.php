@@ -42,7 +42,8 @@ class ReportController extends Controller
 			array('allow','actions'=>array('monthly'),'expression'=>array('ReportController','allowMonthly')),
 			array('allow','actions'=>array('feedbackstat'),'expression'=>array('ReportController','allowFeedbackstat')),
 			array('allow','actions'=>array('feedback'),'expression'=>array('ReportController','allowFeedback')),
-			array('allow', 
+			array('allow','actions'=>array('summarySC'),'expression'=>array('ReportController','allowSummarySC')),
+			array('allow',
 				'actions'=>array('generate'),
 				'expression'=>array('ReportController','allowReadOnly'),
 			),
@@ -421,6 +422,23 @@ class ReportController extends Controller
 		Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Report submitted. Please go to Report Manager to retrieve the output.'));
 	}
 
+// Report: SummarySC
+	protected static function allowSummarySC() {
+		return Yii::app()->user->validFunction('B30');
+	}
+	
+	public function actionSummarySC() {
+		$this->function_id = 'B30';
+		Yii::app()->session['active_func'] = $this->function_id;
+        $this->showUI('summarySC','Summary Service Cases Report', 'start_dt,end_dt');
+		//$this->showUIFbList('summarySC', 'Summary Service Cases Report', 'start_dt,end_dt,format');
+	}
+
+    protected function genSummarySC($criteria) {
+        $this->addQueueItem('RptSummarySC', $criteria, 'A4');
+        Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Report submitted. Please go to Report Manager to retrieve the output.'));
+    }
+
 // Report: Feedback
 	protected static function allowFeedback() {
 		return Yii::app()->user->validFunction('B17');
@@ -523,6 +541,7 @@ class ReportController extends Controller
 				if ($model->id=='monthly') $this->genMonthly($model);
 				if ($model->id=='feedbackstat') $this->genFeedbackstat($model);
 				if ($model->id=='feedback') $this->genFeedback($model);
+				if ($model->id=='summarySC') $this->genSummarySC($model);
 //				Yii::app()->end();
 			} else {
 				$message = CHtml::errorSummary($model);

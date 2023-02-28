@@ -16,9 +16,12 @@ return array(
 	'Operation'=>'营运系统',
 	'Personnel'=>'人事系统',
 	'Sales'=>'销售系统',
-    'Quiz'=>'培训测验系统',
+    'Quiz'=>'培训系统',
     'Academic Credit'=>'学分系统',
 	'Online Library'=>'网上文库',
+	'Charitable Credit'=>'慈善分系统',
+	'Service Report'=>'服务报告系统',
+	'Investment'=>'投资管理系统',
 
 	'Data Entry'=>'数据输入',
 	'Report'=>'报表',
@@ -42,6 +45,9 @@ return array(
 	'Monthly Report Input'=>'月报数据输入',
 	'LBS Customer Enquiry'=>'史伟莎客户查询',
     'Comprehensive data comparative analysis'=>'综合数据对比分析',
+    'Monthly Report Analysis'=>'月报表分析',
+	'Quality'=>'质检',
+    'Average score of quality inspection'=>'质检平均分',
 	
 	'All'=>'全部',
 	'All Daily Reports'=>'日报表总汇',
@@ -51,6 +57,13 @@ return array(
 	'Customer-Resume'=>'恢复服务客户',
 	'Customer-Amendment'=>'更改服务客户',
 	'Customer-Terminate'=>'终止服务客户',
+	'Customer-All'=>'暂停/恢复/终止服务客户',
+	'ID-Customer-New'=>'ID新增客户',
+	'ID-Customer-Renewal'=>'ID续约客户',
+	'ID-Customer-Suspended'=>'ID暂停服务客户',
+	'ID-Customer-Resume'=>'ID恢复服务客户',
+	'ID-Customer-Amendment'=>'ID更改服务客户',
+	'ID-Customer-Terminate'=>'ID终止服务客户',
 	'Staff'=>'人事资料',
 	'Report Manager'=>'报表管理员',
 	'Renewal Reminder'=>'续约提醒',
@@ -102,5 +115,28 @@ return array(
     'QC Delete'=>'品检删除',
 	'System Use'=>'系统使用',
 	'Announcement'=>'公告',
+	'Monthly Report Edit'=>'月报表编辑',
+
+    'Integrated data email (region)'=>'综合数据电邮（地区）',
+    'Integrated data email (regional)'=>'综合数据电邮（区域）',
+    'Integrated data email (all)'=>'综合数据电邮（全部）',
+
+    'Service Endreason'=>'服务结束原因',
+
+    'Customer Type ID'=>'ID类别',
+    'Customer Service ID'=>'ID客户服务',
+    'Pay Week'=>'付款周期',
+    'Renaud Air List'=>'蔚诺空气业务签单排行榜',
+    'Stop Remark'=>'终止原因',
+
+    'ID Sales Commission ladder'=>'ID服务提成阶梯',
+    'ID Sales Commission'=>'ID销售提成计算',
+    'ID Sales Commission history'=>'ID销售提成查询',
+    'City Ranking list'=>'地方老总排行榜',
+    'Months Ranking list'=>'总经理综合表现排行榜',
+
+	'WorkOrder' => '工作单统计',
+	'LBS WorkOrder'=>'工作单报表',
+	'Summary Service Cases'=>'生意额数据汇总表',
 );
 ?>
