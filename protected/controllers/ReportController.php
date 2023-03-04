@@ -481,7 +481,7 @@ class ReportController extends Controller
 	public function actionActiveService() {
 		$this->function_id = 'B31';
 		Yii::app()->session['active_func'] = $this->function_id;
-        $this->showUI('activeService','Active Contract', 'target_dt');
+        $this->showUI('activeService','Active Contract Report', 'target_dt');
 	}
 
     protected function genActiveService($criteria) {
@@ -559,6 +559,7 @@ class ReportController extends Controller
 				if ($model->id=='feedbackstat') $this->genFeedbackstat($model);
 				if ($model->id=='feedback') $this->genFeedback($model);
 				if ($model->id=='summarySC') $this->genSummarySC($model);
+				if ($model->id=='activeService') $this->genActiveService($model);
 //				Yii::app()->end();
 			} else {
 				$message = CHtml::errorSummary($model);
