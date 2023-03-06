@@ -17,10 +17,11 @@ class RptSummarySC extends ReportData2 {
 
         //rpt_cat='INV' 的客户服务时产品，所以需要筛选出去
         $rows = Yii::app()->db->createCommand()
-            ->select("a.status,a.city,f.rpt_cat,a.nature_type,a.paid_type,a.amt_paid,a.ctrt_period,a.b4_paid_type,a.b4_amt_paid
+            ->select("a.status,a.city,f.rpt_cat,a.nature_type,g.rpt_cat as nature_rpt_cat,a.paid_type,a.amt_paid,a.ctrt_period,a.b4_paid_type,a.b4_amt_paid
             ,b.region,b.name as city_name,c.name as region_name")
             ->from("swo_service a")
             ->leftJoin("swo_customer_type f","a.cust_type=f.id")
+            ->leftJoin("swo_nature g","a.nature_type=g.id")
             ->leftJoin("security{$suffix}.sec_city b","a.city=b.code")
             ->leftJoin("security{$suffix}.sec_city c","b.region=c.code")
             ->where("a.city not in ('ZY'){$where}")
@@ -32,7 +33,6 @@ class RptSummarySC extends ReportData2 {
             foreach ($rows as $row) {
                 $row["region"] = $this->strUnsetNumber($row["region"]);
                 $row["region_name"] = $this->strUnsetNumber($row["region_name"]);
-                $row["nature_type"] = is_numeric($row["nature_type"])?intval($row["nature_type"]):0;
                 $row["amt_paid"] = is_numeric($row["amt_paid"])?floatval($row["amt_paid"]):0;
                 $row["ctrt_period"] = is_numeric($row["ctrt_period"])?floatval($row["ctrt_period"]):0;
                 $row["b4_amt_paid"] = is_numeric($row["b4_amt_paid"])?floatval($row["b4_amt_paid"]):0;
@@ -82,8 +82,8 @@ class RptSummarySC extends ReportData2 {
                             $data[$region]["list"][$city]["num_new"]+=$money;
                             $data[$region]["list"][$city]["num_long"]+=$row["ctrt_period"]>=12?$money:0;
                             $data[$region]["list"][$city]["num_short"]+=$row["ctrt_period"]<12?$money:0;
-                            $data[$region]["list"][$city]["num_cate"]+=$row["nature_type"]==2?$money:0;
-                            $data[$region]["list"][$city]["num_not_cate"]+=$row["nature_type"]!=2?$money:0;
+                            $data[$region]["list"][$city]["num_cate"]+=$row["nature_rpt_cat"]=="A01"?$money:0;
+                            $data[$region]["list"][$city]["num_not_cate"]+=$row["nature_rpt_cat"]!="A01"?$money:0;
                             break;
                         case "A"://更改
                             $data[$region]["list"][$city]["num_update"]+=($money-$b4_money);
@@ -102,8 +102,8 @@ class RptSummarySC extends ReportData2 {
                     }
                 }elseif($row["status"]=="N"){//產品(新增)
                     $data[$region]["list"][$city]["u_invoice_sum"]+=$money;
-                    $data[$region]["list"][$city]["u_num_cate"]+=$row["nature_type"]==2?$money:0;
-                    $data[$region]["list"][$city]["u_num_not_cate"]+=$row["nature_type"]!=2?$money:0;
+                    $data[$region]["list"][$city]["u_num_cate"]+=$row["nature_rpt_cat"]=="A01"?$money:0;
+                    $data[$region]["list"][$city]["u_num_not_cate"]+=$row["nature_rpt_cat"]!="A01"?$money:0;
                 }
 
             }
