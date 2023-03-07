@@ -47,6 +47,16 @@ return array(
 			),
 		),
 	),
+    'Quality'=>array(
+        'access'=>'E',
+        'icon'=>'fa-life-ring',
+        'items'=>array(
+            'Average score of quality inspection'=>array(
+                'access'=>'E01',
+                'url'=>'/quality/index',
+            ),
+        ),
+    ),
 	'Report'=>array(
 		'access'=>'B',
 		'icon'=>'fa-file-text-o',
