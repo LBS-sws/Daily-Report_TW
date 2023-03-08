@@ -14,12 +14,14 @@ class MonthForm extends CFormModel
     public $finance;
     public $other;
     public $total;
+    public $state;
 
     public function attributeLabels()
     {
         return array(
             'year_no'=>Yii::t('report','Year'),
             'month_no'=>Yii::t('report','Month'),
+            'state'=>Yii::t('report','State'),
         );
     }
 
@@ -900,6 +902,11 @@ class MonthForm extends CFormModel
                         $this->personnel = $ros[0]['personnel'];
                         $this->finance = $ros[0]['finance'];
                         $this->other = $ros[0]['other'];
+                        if($ros[0]['state']=='Y'){
+                            $this->state ='已发送';
+                        }else{
+                            $this->state ='未发送';
+                        }
                     }
                 }
                 $temp = array();
