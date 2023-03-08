@@ -902,7 +902,11 @@ class MonthForm extends CFormModel
                         $this->personnel = $ros[0]['personnel'];
                         $this->finance = $ros[0]['finance'];
                         $this->other = $ros[0]['other'];
-                        if($ros[0]['state']=='Y'){
+                        $subject = "月报表总汇-{$this->year_no}/{$this->month_no}";
+                        $monthEmailRow = Yii::app()->db->createCommand()->select("id")->from("swo_month_email")
+                            ->where("subject=:subject and city=:city",array(":subject"=>$subject,":city"=>$city))
+                            ->queryRow();
+                        if($monthEmailRow){
                             $this->state ='已发送';
                         }else{
                             $this->state ='未发送';
@@ -1078,6 +1082,31 @@ WHERE hdr_id = '".$model['id']."'";
             'lcu' => $lcu,
             'lcd' => date('Y-m-d H:i:s'),
         ));
+        $times = date("Y-m-d H:i:s", strtotime($model['year_no'].'-'.$model['month_no']));
+        $monthEmailRow = Yii::app()->db->createCommand()->select("id")->from("swo_month_email")
+            ->where("subject=:subject and city=:city",array(":subject"=>$subject,":city"=>$city))
+            ->queryRow();
+        if($monthEmailRow){
+            Yii::app()->db->createCommand()->update("swo_month_email", array(
+                'request_dt' => $times,
+                'from_addr' => $from_addr,
+                'subject' => $subject,//郵件主題
+                'city' => $city,//城市
+                'description' => $description,//郵件副題
+                'lcu' => $lcu,
+                'lcd' => date('Y-m-d H:i:s'),
+            ),"id=:id",array(":id"=>$monthEmailRow["id"]));
+        }else{
+            Yii::app()->db->createCommand()->insert("swo_month_email", array(
+                'request_dt' => $times,
+                'from_addr' => $from_addr,
+                'subject' => $subject,//郵件主題
+                'city' => $city,//城市
+                'description' => $description,//郵件副題
+                'lcu' => $lcu,
+                'lcd' => date('Y-m-d H:i:s'),
+            ));
+        }
         $model->excel['f74']=$total;
 //        print_r('<pre/>');
 //        print_r($msg_url);
