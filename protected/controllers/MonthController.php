@@ -28,7 +28,7 @@ class MonthController extends Controller
 				'expression'=>array('MonthController','allowReadWrite'),
 			),
 			array('allow', 
-				'actions'=>array('index','view','xiazai','summarize','test'),
+				'actions'=>array('index','view','xiazai','summarize','test','testEmail'),
 				'expression'=>array('MonthController','allowReadOnly'),
 			),
 			array('deny',  // deny all users
@@ -144,6 +144,37 @@ class MonthController extends Controller
         $model->sendDate($model,$total,$city);
         Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Save Ok'));
         $this->render('summarize',array('model'=>$model,));
+    }
+
+    public function actionTestEmail($year=2023,$month=1){
+        $suffix = Yii::app()->params['envSuffix'];
+        $subject = "月报表总汇-{$year}/{$month}";
+        $rows = Yii::app()->db->createCommand()->select("a.lcu,a.description,a.from_addr,a.request_dt,a.lcd,b.city")
+            ->from("swo_email_queue a")
+            ->leftJoin("security{$suffix}.sec_user b","a.lcu=b.username")
+            ->where("a.subject=:subject",array(":subject"=>$subject))
+            ->queryAll();
+        if($rows){
+            foreach ($rows as $row){
+                echo "user:{$row["lcu"]}，city:{$row["city"]}<br/>";
+                $monthEmailRow = Yii::app()->db->createCommand()->select("id")
+                    ->from("swo_month_email")
+                    ->where("subject=:subject and city=:city",array(":subject"=>$subject,":city"=>$row["city"]))
+                    ->queryRow();
+                if(!$monthEmailRow){
+                    echo "insert success!<br/>";
+                    Yii::app()->db->createCommand()->insert("swo_month_email", array(
+                        'request_dt' => $row["request_dt"],
+                        'from_addr' => $row["from_addr"],
+                        'subject' => $subject,//郵件主題
+                        'city' => $row["city"],//城市
+                        'description' => $row["description"],//郵件副題
+                        'lcu' => $row["lcu"],
+                        'lcd' => $row["lcd"],
+                    ));
+                }
+            }
+        }
     }
 
 	protected function performAjaxValidation($model)
