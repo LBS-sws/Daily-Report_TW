@@ -172,6 +172,9 @@ class SysBlock {
      * 2022/09/07 限制修改成：每个月倒数第二天限制专员和审核人必须审核完当前地区所有的申请记录
      **/
     public function isCreditConfirmed() {
+        if($this->systemIsCN==1){//台灣不需要此驗證
+            return true;
+        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
@@ -205,6 +208,9 @@ class SysBlock {
      * 2022/09/07 限制修改成：每个月倒数第二天限制专员和审核人必须审核完当前地区所有的申请记录
      **/
     public function isCreditApproved() {
+        if($this->systemIsCN==1){//台灣不需要此驗證
+            return true;
+        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
@@ -264,6 +270,9 @@ class SysBlock {
     每个月倒数第二天限制专员和审核人必须审核完当前地区所有的慈善分记录, false: 未处理
      **/
     public function isCharityApproved () {
+        if($this->systemIsCN==1){//台灣不需要此驗證
+            return true;
+        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
@@ -291,6 +300,9 @@ class SysBlock {
     每个月倒数第二天限制专员和审核人必须审核完当前地区所有的慈善分记录, false: 未处理
      **/
     public function isCharityConfirmed () {
+        if($this->systemIsCN==1){//台灣不需要此驗證
+            return true;
+        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
