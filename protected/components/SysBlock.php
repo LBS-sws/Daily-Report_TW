@@ -5,7 +5,8 @@ class SysBlock {
     protected $systemIsCN=0;//0：大陸。 1：台灣。2：新加坡。 3：吉隆坡
 
     public function __construct() {
-        $this->checkItems = require(Yii::app()->basePath.'/config/sysblock.php');
+        $blockConfig = dirname(dirname(__FILE__))."/config/sysblock.php";
+        $this->checkItems = require($blockConfig);
         $this->systemIsCN = General::SystemIsCN();
     }
 
@@ -171,9 +172,6 @@ class SysBlock {
      * 2022/09/07 限制修改成：每个月倒数第二天限制专员和审核人必须审核完当前地区所有的申请记录
      **/
     public function isCreditConfirmed() {
-        if($this->systemIsCN==1){//台灣不需要此驗證
-            return true;
-        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
@@ -207,9 +205,6 @@ class SysBlock {
      * 2022/09/07 限制修改成：每个月倒数第二天限制专员和审核人必须审核完当前地区所有的申请记录
      **/
     public function isCreditApproved() {
-        if($this->systemIsCN==1){//台灣不需要此驗證
-            return true;
-        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
@@ -269,9 +264,6 @@ class SysBlock {
     每个月倒数第二天限制专员和审核人必须审核完当前地区所有的慈善分记录, false: 未处理
      **/
     public function isCharityApproved () {
-        if($this->systemIsCN==1){//台灣不需要此驗證
-            return true;
-        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
@@ -299,9 +291,6 @@ class SysBlock {
     每个月倒数第二天限制专员和审核人必须审核完当前地区所有的慈善分记录, false: 未处理
      **/
     public function isCharityConfirmed () {
-        if($this->systemIsCN==1){//台灣不需要此驗證
-            return true;
-        }
         $uid = Yii::app()->user->id;
         $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
@@ -442,8 +431,7 @@ class SysBlock {
                 ->order("a.qc_date desc")
                 ->queryScalar();
             if($result){
-                $nowMonth = date("Y/m/01");
-                $nowMonth = date("Y-m",strtotime("$nowMonth -1 month"));
+                $nowMonth = $result;
                 $title = Yii::app()->db->createCommand()->select("MAX(title_num/title_sum)")->from("quiz$suffix.exa_join")
                     ->where("employee_id=:employee_id and date_format(lcd,'%Y-%m')>=:date",array(":employee_id"=>$row['id'],":date"=>$nowMonth))->queryScalar();
                 $title = $title===null?0:floatval($title);
