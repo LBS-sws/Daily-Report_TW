@@ -113,7 +113,7 @@ class RptSummarySC extends ReportData2 {
 		return true;
 	}
 
-	protected function strUnsetNumber($str){
+	public static function strUnsetNumber($str){
 	    if(!empty($str)){
             $arr = str_split($str,1);
             foreach ($arr as $key=>$value){
