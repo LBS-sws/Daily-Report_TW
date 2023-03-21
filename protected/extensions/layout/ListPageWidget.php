@@ -11,10 +11,12 @@ class ListPageWidget extends CWidget
 	public $hasNavBar = true;
 	public $hasSearchBar = true;
 	public $hasPageBar = true;
-	public $search_add_html = '';
 	public $searchlinkparam = array();
+    public $search_add_html = '';
 	public $city=array();
 	public $advancedSearch = false;
+	
+	public $hasDateButton = false;
 	
 	public $record;
 	public $recordptr;
@@ -31,6 +33,7 @@ class ListPageWidget extends CWidget
        // print_r($records);exit();
 		$layout = '<div class="box">';
 		$layout .= '<div class="box-header"><h3 class="box-title"><strong>'.$this->title.'</strong></h3>';
+		$layout .= $this->renderDateButton();
 		$layout .= '</div>';
 		$layout .= '<div class="box-body table-responsive">';
 
@@ -43,6 +46,9 @@ class ListPageWidget extends CWidget
 				$layout .= '<span class="pull-right">';
 				$layout .= $this->searchBar();
 				$layout .= '</span>';
+                if(!empty($this->search_add_html)){
+                    $layout.="<span class='pull-right' style='margin-right: 15px;'>".$this->search_add_html."</span>";
+                }
 				if(!empty($this->city)){
                     $layout.="<select id='MonthList_searchField' class='form-control' name='MonthList[city]' style='float:right;margin-right: 15px'> ";
                     $layout.="<option value=''>-- 城市 --</option>";
@@ -58,13 +64,15 @@ class ListPageWidget extends CWidget
                     }
                     $layout.="</select>";
                 }
-                if(!empty($this->search_add_html)){
-                    $layout.="<span class='pull-right' style='margin-right: 15px;'>".$this->search_add_html."</span>";
-                }
 
 			}
 		$layout .= '</div>';
-		}
+		}else{
+
+            if(!empty($this->search_add_html)){
+                $layout.="<div class=\"box-tools\"><span class='pull-right' style='margin-right: 15px;'>".$this->search_add_html."</span></div>";
+            }
+        }
 		$layout .= '<div><table id="tblData" class="table table-hover">';
 		$layout .= '<thead>';
 		$layout .= $this->render($this->viewhdr, null, true);
@@ -156,6 +164,55 @@ EOF;
 				Yii::app()->clientScript->registerScript('ListPageAdvancedSrch',$js,CClientScript::POS_READY);
 			}
 		}
+	}
+
+	protected function renderDateButton() {
+		$modelName = get_class($this->model);
+		$rtn = TbHtml::hiddenField($modelName.'[dateRangeValue]', $this->model->dateRangeValue, array('id'=>$modelName.'_dateRangeValue'));
+		
+		if ($this->hasDateButton) {
+
+			$rtn .= '<div class="box-tools">';
+			$rtn .= '<span class="pull-right">';
+			$rtn .= TbHtml::button(Yii::t('misc','Latest month'), array('id'=>'btnDateM1','class'=>'btn-default'));
+			$rtn .= TbHtml::button(Yii::t('misc','3 months'), array('id'=>'btnDateM3','class'=>'btn-default'));
+			$rtn .= TbHtml::button(Yii::t('misc','6 months'), array('id'=>'btnDateM6','class'=>'btn-default'));
+			$rtn .= TbHtml::button(Yii::t('misc','1 year'), array('id'=>'btnDateY1','class'=>'btn-default'));
+			$rtn .= TbHtml::button(Yii::t('misc','All'), array('id'=>'btnDateAll','class'=>'btn-default'));
+			$rtn .= '</span>';
+			$rtn .= '</div>';
+			
+			$fldname = $modelName.'_dateRangeValue';
+
+			$link = '/'.$this->controller->uniqueId.'/'.$this->controller->action->id;
+			$url = Yii::app()->createUrl($link);
+			
+			$js = <<<EOF
+function setDateRange(v){
+	var obj = $('#$fldname'); 
+	obj.val(v);
+	Loading.show();
+	jQuery.yii.submitForm(obj,'$url',{});
+}
+
+$('#btnDateAll').on('click',function(){setDateRange('0');});
+$('#btnDateM1').on('click',function(){setDateRange('1');});
+$('#btnDateM3').on('click',function(){setDateRange('3');});
+$('#btnDateM6').on('click',function(){setDateRange('6');});
+$('#btnDateY1').on('click',function(){setDateRange('12');});
+
+var dv = $('#$fldname').val();
+switch (dv) {
+	case '0': $('#btnDateAll').removeClass('btn-default').addClass('btn-info'); break;
+	case '1': $('#btnDateM1').removeClass('btn-default').addClass('btn-info'); break;
+	case '3': $('#btnDateM3').removeClass('btn-default').addClass('btn-info'); break;
+	case '6': $('#btnDateM6').removeClass('btn-default').addClass('btn-info'); break;
+	case '12': $('#btnDateY1').removeClass('btn-default').addClass('btn-info'); break;
+}
+EOF;
+			Yii::app()->clientScript->registerScript('selectDateRange',$js,CClientScript::POS_READY);
+		}
+		return $rtn;
 	}
 
 	protected function navBar() 
