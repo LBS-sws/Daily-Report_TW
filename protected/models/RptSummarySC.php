@@ -14,6 +14,9 @@ class RptSummarySC extends ReportData2 {
         $this->criteria->end_dt = General::toDate($this->criteria->end_dt);
         $where .= " and "."a.status_dt>='{$this->criteria->start_dt} 00:00:00'";
         $where .= " and "."a.status_dt<='{$this->criteria->end_dt} 23:59:59'";
+        if(isset($this->criteria->city)&&!empty($this->criteria->city)){
+            $where .= " and "."a.city in ({$this->criteria->city})";
+        }
 
         //rpt_cat='INV' 的客户服务时产品，所以需要筛选出去
         $rows = Yii::app()->db->createCommand()
