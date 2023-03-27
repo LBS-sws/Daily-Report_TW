@@ -25,7 +25,7 @@ class ComparisonSetList extends CListPageModel
     }
 
     public static function notCitySqlStr(){
-	    $cityList = array("ZY");
+	    $cityList = array("TP-2","TP-3","HK");
 	    return implode("','",$cityList);
     }
 	
