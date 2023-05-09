@@ -132,8 +132,8 @@ class HistoryAddForm extends CFormModel
         $serviceRowsID = $serviceRowsID?$serviceRowsID:array();
         $rows = array_merge($serviceRows,$serviceRowsID);
         $uList = array();
-        $this->insertUData($this->start_date,$this->end_date,$uList);
-        $this->insertUData($this->last_start_date,$this->last_end_date,$uList);
+        //$this->insertUData($this->start_date,$this->end_date,$uList);
+        //$this->insertUData($this->last_start_date,$this->last_end_date,$uList);
         if(!empty($rows)){
             foreach ($rows as $row){
                 $row["region"] = RptSummarySC::strUnsetNumber($row["region"]);
