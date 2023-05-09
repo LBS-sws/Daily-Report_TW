@@ -51,23 +51,7 @@ class RptSummarySC extends ReportData2 {
                 }
                 if(!key_exists($city,$data[$region]["list"])){
                     $cityList[$city] = $region;
-                    $data[$region]["list"][$city]=array(
-                        "city"=>$city,
-                        "city_name"=>$row["city_name"],
-                        "num_new"=>0,//新增
-                        "u_invoice_sum"=>0,//新增(U系统同步数据)
-                        "num_stop"=>0,//终止服务
-                        "num_restore"=>0,//恢复服务
-                        "num_pause"=>0,//暂停服务
-                        "num_update"=>0,//更改服务
-                        "num_growth"=>0,//净增长
-                        "num_long"=>0,//长约（>=12月）
-                        "num_short"=>0,//短约
-                        "num_cate"=>0,//餐饮客户
-                        "num_not_cate"=>0,//非餐饮客户
-                        "u_num_cate"=>0,//餐饮客户(U系统同步数据)
-                        "u_num_not_cate"=>0,//非餐饮客户(U系统同步数据)
-                    );
+                    $data[$region]["list"][$city]=$this->defMoreCity($city,$row["city_name"]);
                 }
                 if($row["paid_type"]=="M"){//月金额
                     $money = $row["amt_paid"]*$row["ctrt_period"];
@@ -112,6 +96,7 @@ class RptSummarySC extends ReportData2 {
             }
         }
 
+        $this->defaultRowForCity($data,$cityList,$this->criteria->city);
         $this->data = $data;
 		return true;
 	}
@@ -127,6 +112,69 @@ class RptSummarySC extends ReportData2 {
             return implode("",$arr);
         }else{
 	        return "none";
+        }
+    }
+
+	private function defMoreCity($city,$cityName){
+	    return array(
+            "city"=>$city,
+            "city_name"=>$cityName,
+            "num_new"=>0,//新增
+            "u_invoice_sum"=>0,//新增(U系统同步数据)
+            "num_stop"=>0,//终止服务
+            "num_restore"=>0,//恢复服务
+            "num_pause"=>0,//暂停服务
+            "num_update"=>0,//更改服务
+            "num_growth"=>0,//净增长
+            "num_long"=>0,//长约（>=12月）
+            "num_short"=>0,//短约
+            "num_cate"=>0,//餐饮客户
+            "num_not_cate"=>0,//非餐饮客户
+            "u_num_cate"=>0,//餐饮客户(U系统同步数据)
+            "u_num_not_cate"=>0,//非餐饮客户(U系统同步数据)
+        );
+    }
+
+    //填充默認城市
+    private function defaultRowForCity(&$data,&$cityList,$city_allow){
+        $notCity = ComparisonSetList::notCitySqlStr();
+        $notCity = explode("','",$notCity);
+        $hasCity = array_keys($cityList);
+        $notCity = array_merge($hasCity,$notCity);
+        $suffix = Yii::app()->params['envSuffix'];
+        $where="b.code not in (SELECT f.region FROM security{$suffix}.sec_city f WHERE f.region is not NULL and f.region!='' GROUP BY f.region)";
+        if(!empty($city_allow)){
+            $where.=" and b.code in ({$city_allow})";
+        }
+        if(!empty($notCity)){
+            $notCity = implode("','",$notCity);
+            $where.=" and b.code not in ('{$notCity}')";
+        }
+
+        $rows = Yii::app()->db->createCommand()
+            ->select("b.code,b.region,b.name as city_name,c.name as region_name")
+            ->from("security{$suffix}.sec_city b")
+            ->leftJoin("security{$suffix}.sec_city c","b.region=c.code")
+            ->where($where)
+            ->order("b.code")
+            ->queryAll();
+        if($rows){
+            foreach ($rows as $row){
+                $row["region"] = self::strUnsetNumber($row["region"]);
+                $row["region_name"] = self::strUnsetNumber($row["region_name"]);
+                $city = $row["code"];
+                $region = $row["region"];
+                $region = $city==="MO"?"MO":$region;//澳門地區單獨顯示
+                if(!key_exists($region,$data)){
+                    $data[$region]=array(
+                        "region"=>$region,
+                        "region_name"=>$row["region_name"],
+                        "list"=>array()
+                    );
+                }
+                $cityList[$city] = $region;
+                $data[$region]["list"][$city]=$this->defMoreCity($city,$row["city_name"]);
+            }
         }
     }
 }
