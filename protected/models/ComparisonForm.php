@@ -346,6 +346,7 @@ class ComparisonForm extends CFormModel
         switch ($row["status"]) {
             case "N"://新增
                 $data[$region]["list"][$city][$newStr] += $money;
+				$data[$region]["list"][$city][$netStr] += $money;
                 break;
             case "T"://终止
                 if($row["rpt_cat"]!=="INV") {//服務,產品不計算終止金額
@@ -358,7 +359,6 @@ class ComparisonForm extends CFormModel
 				}
                 break;
         }
-        $data[$region]["list"][$city][$netStr] += $money;
     }
 
     protected function resetTdRow(&$list,$bool=false){
@@ -745,6 +745,7 @@ class ComparisonForm extends CFormModel
 
     //下載
     public function downExcel($excelData){
+        $this->validateDate("","");
         $this->comparison_year = date("Y",strtotime($this->start_date));
         $this->month_start_date = date("m/d",strtotime($this->start_date));
         $this->month_end_date = date("m/d",strtotime($this->end_date));
