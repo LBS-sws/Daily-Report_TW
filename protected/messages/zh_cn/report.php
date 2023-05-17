@@ -20,6 +20,7 @@ return array(
     'Comprehensive data comparative analysis'=>'综合数据对比分析',
 	'Summary Service Cases Report'=>'生意额数据汇总表',
 	'Active Contract'=>'生效中合约报表',
+	'U Service Amount'=>'服务金额汇总',
 	
 	'City'=>'地区',
 	'Type'=>'类别',

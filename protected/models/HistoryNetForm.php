@@ -206,12 +206,15 @@ class HistoryNetForm extends CFormModel
         );
         for($i=1;$i<=$this->search_month;$i++){
             $month = $i>=10?10:"0{$i}";
-            $dateStrOne = $this->search_year."/{$month}";
-            $dateStrTwo = $this->last_year."/{$month}";
+            $dateStrOne = $this->search_year."/{$month}";//产品金额
+            $dateStrTwo = $this->last_year."/{$month}";//产品金额
+            $dateStrThree = "u_".$this->search_year."/{$month}";//生意额
             $arr[$dateStrOne]=key_exists($city,$uList)&&key_exists($dateStrOne,$uList[$city])?$uList[$city][$dateStrOne]:0;
             $arr[$dateStrOne."_u"]=$arr[$dateStrOne];
             $arr[$dateStrTwo]=key_exists($city,$uList)&&key_exists($dateStrTwo,$uList[$city])?$uList[$city][$dateStrTwo]:0;
             $arr[$dateStrTwo."_u"]=$arr[$dateStrTwo];
+            //U系统的生意额
+            $arr[$dateStrThree]=key_exists($city,$uList)&&key_exists($dateStrThree,$uList[$city])?$uList[$city][$dateStrThree]:0;
         }
         $arr["now_average"]=0;//本年平均
         $arr["last_average"]=0;//上一年平均
@@ -293,6 +296,7 @@ class HistoryNetForm extends CFormModel
         $list["two_net"]=HistoryAddForm::historyNumber($list["two_net"],$bool);
         $list["now_average"]=0;
         $list["last_average"]=0;
+        $list["u_average"]=0;
         $list["growth"]=HistoryAddForm::comYes($list["now_week"],$list["last_week"]);
         $list["start_result"]=HistoryAddForm::comYes($list["now_week"],$list["start_two_net"]);
         $list["result"]=HistoryAddForm::comYes($list["now_week"],$list["two_net"]);
@@ -300,15 +304,20 @@ class HistoryNetForm extends CFormModel
             $month = $i>=10?10:"0{$i}";
             $nowStr = $this->search_year."/{$month}";
             $lastStr = $this->last_year."/{$month}";
+            $uStr = "u_".$this->search_year."/{$month}";
             $list[$nowStr] = key_exists($nowStr,$list)?$list[$nowStr]:0;
             $list[$lastStr] = key_exists($lastStr,$list)?$list[$lastStr]:0;
+            $list[$uStr] = key_exists($uStr,$list)?$list[$uStr]:0;
             $list[$nowStr] = HistoryAddForm::historyNumber($list[$nowStr],$bool);
             $list[$lastStr] = HistoryAddForm::historyNumber($list[$lastStr],$bool);
+            $list[$uStr] = HistoryAddForm::historyNumber($list[$uStr],$bool);
             $list["now_average"]+=$list[$nowStr];
             $list["last_average"]+=$list[$lastStr];
+            $list["u_average"]+=$list[$uStr];
         }
         $list["now_average"]=round($list["now_average"]/$this->search_month,2);
         $list["last_average"]=round($list["last_average"]/$this->search_month,2);
+        $list["u_average"]=round($list["u_average"]/$this->search_month,2);
     }
 
     //顯示提成表的表格內容
@@ -334,7 +343,10 @@ class HistoryNetForm extends CFormModel
             ),//上一年
             array("name"=>$this->search_year,"background"=>"#fcd5b4",
                 "colspan"=>$monthArr
-            )//本年
+            ),//本年
+            array("name"=>$this->search_year.Yii::t("summary","Actual monthly amount"),"background"=>"#FDE9D9",
+                "colspan"=>$monthArr
+            )//生意额
         );
 
         $topList[]=array("name"=>$this->search_month.Yii::t("summary"," month estimate"),"background"=>"#f2dcdb",
@@ -427,10 +439,12 @@ class HistoryNetForm extends CFormModel
             $month = $i>=10?10:"0{$i}";
             $bodyKey[]=$this->last_year."/{$month}";
             $dateTwoList[]=$this->search_year."/{$month}";
+            $dateThreeList[]="u_".$this->search_year."/{$month}";
         }
         $bodyKey[]="last_average";
         $dateTwoList[]="now_average";
-        $bodyKey=array_merge($bodyKey,$dateTwoList);
+        $dateThreeList[]="u_average";
+        $bodyKey=array_merge($bodyKey,$dateTwoList,$dateThreeList);
 
         $bodyKey[]="now_week";
         $bodyKey[]="last_week";
@@ -486,7 +500,7 @@ class HistoryNetForm extends CFormModel
                             $allRow[$keyStr]+=is_numeric($text)?floatval($text):0;
                             $tdClass = HistoryAddForm::getTextColorForKeyStr($text,$keyStr);
                             $inputHide = TbHtml::hiddenField("excel[{$regionList['region']}][list][{$cityList['city']}][]",$text);
-                            if(strpos($keyStr,'/')!==false){//调试U系统同步数据
+                            if(strpos($keyStr,'/')!==false&&strpos($keyStr,'u_')===false){//调试U系统同步数据
                                 $html.="<td class='{$tdClass}' data-u='{$cityList[$keyStr."_u"]}'><span>{$text}</span>{$inputHide}</td>";
                             }else{
                                 $html.="<td class='{$tdClass}'><span>{$text}</span>{$inputHide}</td>";
