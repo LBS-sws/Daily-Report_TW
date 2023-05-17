@@ -65,6 +65,10 @@ return array(
 		'access'=>'B',
 		'icon'=>'fa-file-text-o',
 		'items'=>array(
+			'U Service Amount'=>array( //服務金額匯總
+				'access'=>'B32',
+				'url'=>'/report/uService',
+			),
 			'Summary Service Cases'=>array( //客戶服務匯總
 				'access'=>'B30',
 				'url'=>'/report/summarySC',
@@ -174,6 +178,10 @@ return array(
             'History Net'=>array(
                 'access'=>'G09',
                 'url'=>'/historyNet/index',
+            ),
+            'U Service Amount'=>array(
+                'access'=>'G10',
+                'url'=>'/uService/index',
             ),
             'Comparison Set'=>array(
                 'access'=>'G06',

@@ -114,7 +114,8 @@ class HistoryNetForm extends CFormModel
         $serviceRows = $serviceRows?$serviceRows:array();
         $serviceRowsID = $serviceRowsID?$serviceRowsID:array();
         $rows = array_merge($serviceRows,$serviceRowsID);
-        $uList = array();
+        //$uList = array();
+        $uList = $this->getUActualMoney($this->start_date,$this->end_date,$city_allow);
         //$this->insertUData($this->start_date,$this->end_date,$uList);
         //$this->insertUData($this->last_start_date,$this->last_end_date,$uList);
         if($rows){
@@ -132,6 +133,38 @@ class HistoryNetForm extends CFormModel
         $session = Yii::app()->session;
         $session['historyNet_c01'] = $this->getCriteria();
         return true;
+    }
+
+    //获取U系统的服务单数据
+    public static function getUActualMoney($startDay,$endDay,$city_allow=""){
+        $list = array();
+        $citySql = "";
+        if(!empty($city_allow)){
+            $citySql = " and b.Text in ({$city_allow})";
+        }
+        $suffix = Yii::app()->params['envSuffix'];
+        $rows = Yii::app()->db->createCommand()->select("b.Text,a.JobDate,a.Fee,a.TermCount")
+            ->from("service{$suffix}.joborder a")
+            ->leftJoin("service{$suffix}.officecity f","a.City = f.City")
+            ->leftJoin("service{$suffix}.enums b","f.Office = b.EnumID and b.EnumType=8")
+            ->where("a.Status=3 and a.JobDate BETWEEN '{$startDay}' AND '{$endDay}' {$citySql}")
+            ->order("b.Text")
+            ->queryAll();
+        if($rows){
+            foreach ($rows as $row){
+                $city = $row["Text"];
+                $date = date("Y/m",strtotime($row["JobDate"]));
+                $money = empty($row["TermCount"])?0:floatval($row["Fee"])/floatval($row["TermCount"]);
+                if(!key_exists($city,$list)){
+                    $list[$city]=array();
+                }
+                if(!key_exists("u_{$date}",$list[$city])){
+                    $list[$city]["u_{$date}"]=0;
+                }
+                $list[$city]["u_{$date}"]+=$money;
+            }
+        }
+        return $list;
     }
 
     //填充默認城市
@@ -177,20 +210,26 @@ class HistoryNetForm extends CFormModel
     }
 
     private function insertUData($startDate,$endDate,&$uList){
-        //$year = intval($startDate);//服务的年份
+        $year = intval($startDate);//服务的年份
         $json = Invoice::getInvData($startDate,$endDate);
         if($json["message"]==="Success"){
             $jsonData = $json["data"];
             foreach ($jsonData as $row){
                 $city = $row["city"];
                 $date = date("Y/m",strtotime($row["invoice_dt"]));
+                $money = is_numeric($row["invoice_amt"])?floatval($row["invoice_amt"]):0;
                 if(!key_exists($city,$uList)){
                     $uList[$city]=array();
                 }
                 if(!key_exists($date,$uList[$city])){
                     $uList[$city][$date]=0;
                 }
-                $money = is_numeric($row["invoice_amt"])?floatval($row["invoice_amt"]):0;
+                if($year == $this->search_year){//生意额需要加上产品金额
+                    if(!key_exists("u_{$date}",$uList[$city])){
+                        $uList[$city]["u_{$date}"]=0;
+                    }
+                    $uList[$city]["u_{$date}"]+=$money;
+                }
                 $uList[$city][$date]+=$money;
             }
         }
