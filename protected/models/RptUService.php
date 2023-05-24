@@ -109,7 +109,7 @@ class RptUService extends ReportData2 {
         $suffix = Yii::app()->params['envSuffix'];
         if(!empty($UStaffCodeList)){
             $codeStr = implode(",",$UStaffCodeList);
-            $whereSql = "a.code in ({$codeStr})";
+            $whereSql = "a.code_old in ({$codeStr})";
         }else{
             $whereSql = "a.code=0";
         }
