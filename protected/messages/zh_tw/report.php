@@ -20,7 +20,10 @@ return array(
 'Comprehensive data comparative analysis'=>'綜合數據對比分析',
     'Summary Service Cases Report'=>'生意額數據匯總表',
 	'Active Contract'=>'生效中合約報表',
-    'U Service Amount'=>'服務金額匯總',
+
+    'U Service Amount'=>'技術員生產力分析',
+
+    'Area'=>'區域',
 'City'=>'地區',
 'Type'=>'類別',
 'Year'=>'年',
