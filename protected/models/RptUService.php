@@ -114,7 +114,7 @@ class RptUService extends ReportData2 {
             $whereSql = "a.code=0";
         }
         $rows = Yii::app()->db->createCommand()
-            ->select("a.code,a.entry_time,g.name as dept_name,a.name,a.city,b.name as city_name,
+            ->select("a.code_old,a.code,a.entry_time,g.name as dept_name,a.name,a.city,b.name as city_name,
             g.level_type")
             ->from("hr{$suffix}.hr_employee a")
             ->leftJoin("security{$suffix}.sec_city b","a.city = b.code")
@@ -133,7 +133,7 @@ class RptUService extends ReportData2 {
                 $entryMonth = round($entryMonth);
                 //在职月份
                 $row["entry_month"] = $entryMonth;
-                $list[$row['code']]=$row;
+                $list[$row['code_old']]=$row;
 			}
 		}
         return $list;
