@@ -29,6 +29,11 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 				'submit'=>Yii::app()->createUrl('report/generate'))); 
 		?>
 	</div>
+	<div class="btn-group pull-right" role="group">
+        <?php echo TbHtml::button(Yii::t('misc','Save'), array(
+            'submit'=>Yii::app()->createUrl('report/allsave')));
+        ?>
+	</div>
 	</div></div>
 
 	<div class="box box-info">
