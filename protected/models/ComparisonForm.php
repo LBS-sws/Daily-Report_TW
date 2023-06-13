@@ -351,6 +351,12 @@ class ComparisonForm extends CFormModel
                     $data[$citySet["region_code"]][$newStr] += $money;
 					$data[$citySet["region_code"]][$netStr] += $money;
                 }
+				if($row["rpt_cat"]=="INV"&&$this->comparison_year==$year){ //新生意額需要加上產品金額
+					$data[$city]["u_actual_money"] += $money;
+					if($citySet["add_type"]==1){//叠加(城市配置的叠加)
+						$data[$citySet["region_code"]]["u_actual_money"] += $money;
+					}
+				}
                 break;
             case "T"://终止
                 if($row["rpt_cat"]!=="INV") {//服務,產品不計算終止金額

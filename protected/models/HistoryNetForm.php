@@ -164,18 +164,21 @@ class HistoryNetForm extends CFormModel
             $citySql = " and b.Text in ({$city_allow})";
         }
         $suffix = Yii::app()->params['envSuffix'];
-        $rows = Yii::app()->db->createCommand()->select("b.Text,a.JobDate,a.Fee,a.TermCount")
+        $rows = Yii::app()->db->createCommand()
+            ->select("b.Text,date_format(a.JobDate,'%Y/%m') as JobDate,sum(
+                    if(a.TermCount=0,0,a.Fee/a.TermCount)
+					) as sum_amount")
             ->from("service{$suffix}.joborder a")
             ->leftJoin("service{$suffix}.officecity f","a.City = f.City")
             ->leftJoin("service{$suffix}.enums b","f.Office = b.EnumID and b.EnumType=8")
             ->where("a.Status=3 and a.JobDate BETWEEN '{$startDay}' AND '{$endDay}' {$citySql}")
-            ->order("b.Text")
+            ->group("b.Text,date_format(a.JobDate,'%Y/%m')")
             ->queryAll();
         if($rows){
             foreach ($rows as $row){
                 $city = $row["Text"];
-                $date = date("Y/m",strtotime($row["JobDate"]));
-                $money = empty($row["TermCount"])?0:floatval($row["Fee"])/floatval($row["TermCount"]);
+                $date = $row["JobDate"];
+                $money = empty($row["sum_amount"])?0:round($row["sum_amount"],2);
 
                 if(key_exists($city,$citySetList)) {
                     $region = $citySetList[$city]["region_code"];
@@ -299,6 +302,12 @@ class HistoryNetForm extends CFormModel
         }
         switch ($row["status"]){
             case "N"://新增
+				if($row["rpt_cat"]=="INV"){//新生意額需要加上產品金額
+					$data[$city]["u_".$dateStr] += $money;
+					if($citySet["add_type"]==1){//叠加(城市配置的叠加)
+						$data[$citySet["region_code"]]["u_".$dateStr] += $money;
+					}
+				}
                 break;
             case "T"://终止
 				if($row["rpt_cat"]!=="INV"){//服務
