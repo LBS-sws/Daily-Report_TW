@@ -199,6 +199,10 @@ return array(
                 'access'=>'G06',
                 'url'=>'/comparisonSet/index',
             ),
+            'City Count Set'=>array(//城市统计设置
+                'access'=>'G14',
+                'url'=>'/citySet/index',
+            ),
 		),
 	),
     '月报表'=>array(

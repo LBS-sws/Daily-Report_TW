@@ -80,7 +80,7 @@ class RptUService extends ReportData2 {
                 $item["city"] = $user["city"];
                 $item["dept_name"] = $user["dept_name"];
                 $item["entry_month"] = $user["entry_month"];
-                $item["name"] = $user["name"]." ({$user["code"]})";
+                $item["name"] = $user["name"]." ({$user["code"]})".($user["staff_status"]==-1?Yii::t("summary"," - Leave"):"");
             }else{
                 unset($list[$item["staff"]]);
             }
@@ -93,7 +93,7 @@ class RptUService extends ReportData2 {
 		if(key_exists($code,$list)){
 			return $list[$code];
 		}else{
-			return array("level_type"=>3,"code"=>$code,"name"=>"","city"=>"","dept_name"=>"","entry_month"=>"","city_name"=>"");
+			return array("level_type"=>3,"staff_status"=>0,"code"=>$code,"name"=>"","city"=>"","dept_name"=>"","entry_month"=>"");
 		}
 	}
 
@@ -109,15 +109,14 @@ class RptUService extends ReportData2 {
         $suffix = Yii::app()->params['envSuffix'];
         if(!empty($UStaffCodeList)){
             $codeStr = implode(",",$UStaffCodeList);
-            $whereSql = "a.code_old in ({$codeStr})";
+            $whereSql = "a.code in ({$codeStr})";
         }else{
             $whereSql = "a.code=0";
         }
         $rows = Yii::app()->db->createCommand()
-            ->select("a.code_old,a.code,a.entry_time,g.name as dept_name,a.name,a.city,b.name as city_name,
+            ->select("a.code,a.staff_status,a.entry_time,g.name as dept_name,a.name,a.city,
             g.level_type")
             ->from("hr{$suffix}.hr_employee a")
-            ->leftJoin("security{$suffix}.sec_city b","a.city = b.code")
             ->leftJoin("hr{$suffix}.hr_dept g","a.position = g.id")
             //需要评核类型：技术员 并且 参与评分差异
             ->where($whereSql)
@@ -133,7 +132,7 @@ class RptUService extends ReportData2 {
                 $entryMonth = round($entryMonth);
                 //在职月份
                 $row["entry_month"] = $entryMonth;
-                $list[$row['code_old']]=$row;
+                $list[$row['code']]=$row;
 			}
 		}
         return $list;

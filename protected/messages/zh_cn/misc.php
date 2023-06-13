@@ -13,9 +13,10 @@ return array(
     'xiazai'=>'下载',
     'fenxi'=>'月报总结',
     'ZongJie'=>'总结',
+	'Add Record'=>'新增',
 	'Add'=>'新增',
 	'Add New'=>'新增',
-	'Add Record'=>'新增纪录',
+	'New Record'=>'新增纪录',
 	'Add Another'=>'新增另一纪录',
 	'Record'=>'记录',
 	'-- None --'=>'-- 无 --',
@@ -62,7 +63,8 @@ return array(
 	'Confirm'=>'确认',
 	'OK'=>'确认',
 	'Void'=>'撤消',
-	
+    'Temp'=>'暂存',
+    'Send'=>'发送',
 	'Invalid Station. Please register first.'=>'工作站无效。请先登记。',
 	'User ID has been logged in more than one station.'=>'帐户已被登录到另一工作站。',
 	'Session expired.'=>'系统连接已经过期。请重新登录。',
@@ -89,6 +91,13 @@ return array(
 	'Mark Read'=>'标记已读',
 	'Go Top'=>'往页顶',
 	'Announcement'=>'公告',
+
+	'Latest month'=>'1个月內',
+	'3 months'=>'3个月內',
+	'6 months'=>'6个月內',
+	'1 year'=>'1年內',
+	'Your ranking is:'=>'你当前的段位为:',
+    'Send Email'=>'发送邮件',
 );
 
 ?>
