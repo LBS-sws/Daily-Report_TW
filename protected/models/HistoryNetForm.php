@@ -283,6 +283,7 @@ class HistoryNetForm extends CFormModel
 
     private function insertDataForRow($row,&$data,$citySetList){
         $timer = strtotime($row["status_dt"]);
+        $year = date("Y",$timer);
         $dateStr = date("Y/m",$timer);
         $city = empty($row["city"])?"none":$row["city"];
         $citySet = CitySetForm::getListForCityCode($city,$citySetList);
@@ -302,7 +303,7 @@ class HistoryNetForm extends CFormModel
         }
         switch ($row["status"]){
             case "N"://新增
-				if($row["rpt_cat"]=="INV"){//新生意額需要加上產品金額
+				if($row["rpt_cat"]=="INV"&&$year == $this->search_year){//新生意額需要加上產品金額
 					$data[$city]["u_".$dateStr] += $money;
 					if($citySet["add_type"]==1){//叠加(城市配置的叠加)
 						$data[$citySet["region_code"]]["u_".$dateStr] += $money;
