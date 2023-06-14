@@ -141,7 +141,7 @@ class SalesAnalysisForm extends CFormModel
             ->select("b.username,b.city,sum(a.field_value) as last_amt")
             ->from("sales{$suffix}.sal_visit_info a")
             ->leftJoin("sales{$suffix}.sal_visit b","a.visit_id=b.id")
-            ->where("b.city in ({$city_allow}) and ({$dealSQL}) and a.field_id in ('{$amtSql}') and 
+            ->where("({$dealSQL}) and a.field_id in ('{$amtSql}') and 
             DATE_FORMAT(b.visit_dt,'%Y')='{$this->last_year}'"
             )->group("b.username,b.city,DATE_FORMAT(b.visit_dt,'%Y/%m')")->queryAll();
         if($rows){
@@ -168,7 +168,7 @@ class SalesAnalysisForm extends CFormModel
             ->select("b.username,b.city,sum(a.field_value) as now_amt,DATE_FORMAT(b.visit_dt,'%Y/%m') as month")
             ->from("sales{$suffix}.sal_visit_info a")
             ->leftJoin("sales{$suffix}.sal_visit b","a.visit_id=b.id")
-            ->where("b.city in ({$city_allow}) and ({$dealSQL}) and a.field_id in ('{$amtSql}') and 
+            ->where("({$dealSQL}) and a.field_id in ('{$amtSql}') and 
             b.visit_dt BETWEEN '{$this->start_date}' and '{$this->end_date}'"
             )->group("b.username,b.city,DATE_FORMAT(b.visit_dt,'%Y/%m')")->queryAll();
         if($rows){
