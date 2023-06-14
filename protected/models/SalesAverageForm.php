@@ -76,12 +76,13 @@ class SalesAverageForm extends CFormModel
     public function retrieveData() {
         $data = array();
         $city_allow = Yii::app()->user->city_allow();
-        $citySetList = CitySetForm::getCitySetList();
+        $city_allow = SalesAnalysisForm::getCitySetForCityAllow($city_allow);
+        $citySetList = CitySetForm::getCitySetList($city_allow);
         $lineList = LifelineForm::getLifeLineList($city_allow,$this->end_date);
         $staffList = $this->getStaffCountForCity($city_allow,$citySetList);
         $uList = array();
         //$uList = $this->getUData($this->start_date,$this->end_date,$citySetList);
-        $serviceList = $this->getServiceData($citySetList);
+        $serviceList = $this->getServiceData($citySetList,$city_allow);
 
         foreach ($citySetList as $cityRow){
             $city = $cityRow["code"];
@@ -108,9 +109,8 @@ class SalesAverageForm extends CFormModel
         return true;
     }
 
-    private function getServiceData($citySetList){
+    private function getServiceData($citySetList,$city_allow){
         $data=array();
-        $city_allow = Yii::app()->user->city_allow();
         $suffix = Yii::app()->params['envSuffix'];
         $where="a.status_dt BETWEEN '{$this->start_date}' and '{$this->end_date}'";
         $selectSql = "a.city,sum(case a.paid_type
@@ -209,7 +209,7 @@ class SalesAverageForm extends CFormModel
         if($json["message"]==="Success"){
             $jsonData = $json["data"];
             foreach ($jsonData as $row){
-                $city = $row["city"];
+                $city = SummaryForm::resetCity($row["city"]);
                 $citySet = CitySetForm::getListForCityCode($city,$citySetList);
                 if(!key_exists($city,$list)){
                     $list[$city]=0;
