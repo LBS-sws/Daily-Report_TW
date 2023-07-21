@@ -227,6 +227,9 @@ class SummaryTable extends SummaryForm{
     }
 
     public static function getTableForInv($rows,$city_allow){
+        if(self::$system===1){//台灣版的產品為lbs的inv新增
+            return self::getTableForRows($rows,$city_allow);
+        }
         $html = "<table class='table table-bordered table-striped table-hover'>";
         $html.="<thead><tr>";
         $html.="<th width='100px'>".Yii::t('summary','INV code')."</th>";//产品编号
