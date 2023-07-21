@@ -226,9 +226,94 @@ class SummaryTable extends SummaryForm{
         return $html;
     }
 
+    public static function getTableTWForRows($rows,$city_allow,$invTable=array()){
+        $companyList = GetNameToId::getCompanyList($city_allow);
+        $html="";
+        if(!empty($invTable)){
+            $html.=$invTable["html"];
+            $html.="<p>&nbsp;</p>";
+        }
+        $html.= "<table class='table table-bordered table-striped table-hover'>";
+        $html.="<thead><tr>";
+        $html.="<th width='90px'>".Yii::t('service','Contract No')."</th>";//合同编号
+        $html.="<th width='90px'>".Yii::t('summary','City')."</th>";//城市
+        $html.="<th width='90px'>".Yii::t('summary','search day')."</th>";//日期
+        $html.="<th>".Yii::t('service','Customer')."</th>";//客户编号及名称
+        $html.="<th width='80px'>".Yii::t('service','Customer Type')."</th>";//客户类别
+        $html.="<th width='120px'>".Yii::t('service','Paid Amt')."</th>";//服务金额
+        $html.="<th width='80px'>".Yii::t('customer','Contract Period')."</th>";//合同年限(月)
+        $html.="<th width='100px'>".Yii::t('service','all money')."</th>";//合同总金额
+        $html.="<th width='1px'></th>";
+        $html.="</tr></thead>";
+        $sum = 0;
+        $count=0;
+        if($rows){
+            $html.="<tbody>";
+            $city="";
+            $cityName = "";
+            foreach ($rows as $row){
+                $count++;
+                if($city!=$row["city"]){
+                    $cityName= General::getCityName($row["city"]);
+                    $city = $row["city"];
+                }
+                if($row["sql_type_name"]=="D"){//ID服务
+                    $link = self::drawEditButton('A11', 'serviceID/edit', 'serviceID/view', array('index'=>$row['id']));
+                }else{
+                    $link = self::drawEditButton('A02', 'service/edit', 'service/view', array('index'=>$row['id']));
+                }
+                $companyName = key_exists($row["company_id"],$companyList)?$companyList[$row["company_id"]]["codeAndName"]:$row["company_id"];
+                $row["amt_paid"] = is_numeric($row["amt_paid"])?floatval($row["amt_paid"]):0;
+                $row["ctrt_period"] = is_numeric($row["ctrt_period"])?floatval($row["ctrt_period"]):0;
+
+                if($row["paid_type"]=="M") {//月金额
+                    $row["sum_amount"] = $row["amt_paid"]*$row["ctrt_period"];
+                }else{
+                    $row["sum_amount"] = $row["amt_paid"];
+                }
+                $row["sum_amount"]=round($row["sum_amount"],2);
+                $sum+=$row["sum_amount"];
+                $html.="<tr data-id='{$row["id"]}'>";
+                $html.="<td>".$row["contract_no"]."</td>";
+                $html.="<td>".$cityName."</td>";
+                $html.="<td>".General::toDate($row["status_dt"])."</td>";
+                $html.="<td>".$companyName."</td>";
+                $html.="<td>".$row["cust_type_name"]."</td>";
+                $html.="<td class='text-right'>".$row["amt_paid"]."(".GetNameToId::getPaidTypeForId($row["paid_type"]).") "."</td>";
+                $html.="<td>".$row["ctrt_period"]."</td>";
+                $html.="<td class='text-right'>".$row["sum_amount"]."</td>";
+                $html.="<td>{$link}</td>";
+                $html.="</tr>";
+            }
+            $html.="</tbody><tfoot>";
+            $html.="<tr>";
+            $html.="<td colspan='2' class='text-right'>".Yii::t("summary","total count:")."</td>";
+            $html.="<td colspan='2'>".$count."</td>";
+            $html.="<td colspan='3' class='text-right'>".Yii::t("summary","total amt:")."</td>";
+            $html.="<td colspan='2'>".$sum."</td>";
+            $html.="</tr>";
+            if(!empty($invTable)){
+                $html.="<tr><td colspan='9'>&nbsp;</td></tr>";
+                $count+=$invTable["count"];
+                $sum+=$invTable["sum"];
+                $html.="<tr>";
+                $html.="<td colspan='2' class='text-right'>".Yii::t("summary","total count:")."</td>";
+                $html.="<td colspan='2'>".$count."</td>";
+                $html.="<td colspan='3' class='text-right'>".Yii::t("summary","total amt:")."</td>";
+                $html.="<td colspan='2'>".$sum."</td>";
+                $html.="</tr>";
+            }
+            $html.="</tfoot>";
+        }else{
+            $html.="<tbody><tr><td colspan='9'>".Yii::t("summary","none data")."</td></tr></tbody>";
+        }
+        $html.="</table>";
+        return array("html"=>$html,"count"=>$count,"sum"=>$sum);
+    }
+
     public static function getTableForInv($rows,$city_allow){
         if(self::$system===1){//台灣版的產品為lbs的inv新增
-            return self::getTableForRows($rows,$city_allow);
+            return self::getTableTWForRows($rows,$city_allow);
         }
         $html = "<table class='table table-bordered table-striped table-hover'>";
         $html.="<thead><tr>";
