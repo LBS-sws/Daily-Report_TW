@@ -10,12 +10,25 @@ class CountSearch{
 
     private static $system=1;//0:大陸 1:台灣 2:國際
 
+    public static function getSystem(){
+        return self::$system;
+    }
+
     //獲取暫停、終止的最後一條記錄(一条服务在一个月内只能存在一条暂停和终止)，特例：暫停→恢復→終止（三個都需要計算）
-    public static function getServiceForST($start_dt,$end_dt,$city_allow){
+    public static function getServiceForST($start_dt,$end_dt,$city_allow,$type="all"){
         $list = array();
         $sum_money = "case b.paid_type when 'M' then b.amt_paid * b.ctrt_period else b.amt_paid end";
-
-        $whereSql = "b.status in ('S','T') and b.status_dt BETWEEN '{$start_dt}' and '{$end_dt}'";
+        switch ($type){
+            case "S"://暫停
+                $whereSql="b.status='S'";
+                break;
+            case "T"://終止
+                $whereSql="b.status='T'";
+                break;
+            default://暫停+終止
+                $whereSql="b.status in ('S','T')";
+        }
+        $whereSql.= " and b.status_dt BETWEEN '{$start_dt}' and '{$end_dt}'";
         if(!empty($city_allow)&&$city_allow!="all"){
             $whereSql.= " and b.city in ({$city_allow})";
         }
@@ -417,8 +430,12 @@ class CountSearch{
     public static function getUServiceMoney($startDay,$endDay,$city_allow=""){
         $list = array();
         $citySql = "";
+        $textSql = "b.Text";
+        if(self::$system==2){//國際版
+            $textSql = "IF(b.Text='KL' or b.Text='SL','MY',b.Text)";
+        }
         if(!empty($city_allow)&&$city_allow!="all"){
-            $citySql = " and b.Text in ({$city_allow})";
+            $citySql = " and {$textSql} in ({$city_allow})";
         }
         $suffix = Yii::app()->params['envSuffix'];
         $rows = Yii::app()->db->createCommand()
@@ -489,8 +506,12 @@ class CountSearch{
         if(!empty($city_allow)&&$city_allow!="all"){
             $city = $city_allow;
         }
+        if(self::$system===2&&!empty($city)&&strpos($city,"'MY'")!==false){//國際版
+            $city.=",'KL','SL'";
+        }
         $json = Invoice::getInvData($startDay,$endDay,$city);
         $list = array();
+        $Catering = self::$system===2?"Catering":"餐饮类";
         if($json["message"]==="Success"){
             $jsonData = $json["data"];
             foreach ($jsonData as $row){
@@ -504,7 +525,7 @@ class CountSearch{
                     );
                 }
                 $list[$city]["sum_money"]+=$money;
-                if($row["customer_type"]==="餐饮类"){
+                if($row["customer_type"]===$Catering){
                     $list[$city]["u_num_cate"]+=$money;
                 }else{
                     $list[$city]["u_num_not_cate"]+=$money;
@@ -526,8 +547,12 @@ class CountSearch{
         }
         $list = array();
         $citySql = "";
+        $textSql = "b.Text";
+        if(self::$system==2){//國際版
+            $textSql = "IF(b.Text='KL' or b.Text='SL','MY',b.Text)";
+        }
         if(!empty($city_allow)&&$city_allow!="all"){
-            $citySql = " and b.Text in ({$city_allow})";
+            $citySql = " and {$textSql} in ({$city_allow})";
         }
         $suffix = Yii::app()->params['envSuffix'];
         $rows = Yii::app()->db->createCommand()
@@ -650,7 +675,7 @@ class CountSearch{
     }
 
     //獲取暫停、終止（月為鍵名)
-    public static function getServiceForSTToMonth($end_dt,$city_allow){
+    public static function getServiceForSTToMonth($end_dt,$city_allow,$type="all"){
         $year = date("Y",strtotime($end_dt));
         $start_dt =$year."/01/01";
         $maxMonth = date("n",strtotime($end_dt));
@@ -661,8 +686,17 @@ class CountSearch{
         }
         $list = array();
         $sum_money = "case b.paid_type when 'M' then b.amt_paid * b.ctrt_period else b.amt_paid end";
-
-        $whereSql = "b.status in ('S','T') and b.status_dt BETWEEN '{$start_dt}' and '{$end_dt}'";
+        switch ($type){
+            case "S"://暫停
+                $whereSql="b.status='S'";
+                break;
+            case "T"://終止
+                $whereSql="b.status='T'";
+                break;
+            default://暫停+終止
+                $whereSql="b.status in ('S','T')";
+        }
+        $whereSql.= " and b.status_dt BETWEEN '{$start_dt}' and '{$end_dt}'";
         if(!empty($city_allow)&&$city_allow!="all"){
             $whereSql.= " and b.city in ({$city_allow})";
         }
@@ -814,6 +848,9 @@ class CountSearch{
         $city = "";
         if(!empty($city_allow)&&$city_allow!="all"){
             $city = $city_allow;
+        }
+        if(self::$system===2&&!empty($city)&&strpos($city,"'MY'")!==false){//國際版
+            $city.=",'KL','SL'";
         }
         $year = date("Y",strtotime($endDay));
         $maxMonth = date("n",strtotime($endDay));
