@@ -809,7 +809,7 @@ class CountSearch{
     //获取U系统的產品数据（月為鍵名)
     public static function getUInvMoneyToMonth($endDay,$city_allow=""){
         if(self::$system===1){//台灣版的產品為lbs的inv新增
-            return self::getServiceTWForAdd($endDay,$city_allow);
+            return self::getUInvTWMoneyToMonth($endDay,$city_allow);
         }
         $city = "";
         if(!empty($city_allow)&&$city_allow!="all"){
