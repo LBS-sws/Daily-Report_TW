@@ -244,7 +244,7 @@ class CountSearch{
             sum(if(a.ctrt_period>=12,({$sum_money}),0)) as num_long,
             sum(if(a.ctrt_period<12 and a.ctrt_period!=1,({$sum_money}),0)) as num_short,
             sum(if(a.ctrt_period=1,({$sum_money}),0)) as one_service,
-            sum(if(g.rpt_cat!='A01',({$sum_money}),0)) as num_cate,
+            sum(if(g.rpt_cat='A01',({$sum_money}),0)) as num_cate,
             sum(if(g.rpt_cat!='A01',({$sum_money}),0)) as num_not_cate
             ")
             ->from("swo_service a")
