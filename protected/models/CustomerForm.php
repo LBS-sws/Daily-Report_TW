@@ -13,6 +13,10 @@ class CustomerForm extends CFormModel
 	public $nature;
 	public $address;
 	public $tax_reg_no;
+	public $group_id;
+	public $group_name;
+	public $status;
+	public $email;
 
 	public $service = array();
 	
@@ -26,12 +30,16 @@ class CustomerForm extends CFormModel
 		return array(
 			'id'=>Yii::t('customer','Record ID'),
 			'code'=>Yii::t('customer','Code'),
-			'name'=>Yii::t('customer','Name'),
-			'full_name'=>Yii::t('customer','Full Name'),
+			'name'=>Yii::t('customer','Customer Name'),
+			'full_name'=>Yii::t('customer','Registered Company Name'),
 			'cont_name'=>Yii::t('customer','Contact Name'),
 			'cont_phone'=>Yii::t('customer','Contact Phone'),
 			'address'=>Yii::t('customer','Address'),
-			'tax_reg_no'=>Yii::t('code','Taxpayer No.'),
+			'tax_reg_no'=>Yii::t('code','SSM No.'),
+			'group_id'=>Yii::t('customer','Group ID'),
+			'group_name'=>Yii::t('customer','Group Name'),
+            'email'=>Yii::t('customer','Email'),
+			'status'=>Yii::t('customer','Status'),
 		);
 	}
 	
@@ -41,7 +49,7 @@ class CustomerForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, full_name, cont_name, cont_phone, address, tax_reg_no','safe'),
+			array('id, full_name, cont_name, cont_phone, address, tax_reg_no, group_id, group_name, status,email','safe'),
 			array('name, code','required'),
 /*
 			array('code','unique','allowEmpty'=>true,
@@ -78,6 +86,7 @@ class CustomerForm extends CFormModel
 		$city = Yii::app()->user->city_allow();
 		$sql = "select * from swo_company where id=".$index." and city in ($city)";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+
 		if (count($rows) > 0)
 		{
 			foreach ($rows as $row)
@@ -90,6 +99,10 @@ class CustomerForm extends CFormModel
 				$this->cont_phone = $row['cont_phone'];
 				$this->address = $row['address'];
 				$this->tax_reg_no = $row['tax_reg_no'];
+				$this->group_id = $row['group_id'];
+				$this->group_name = $row['group_name'];
+				$this->status = $row['status'];
+                $this->email = $row['email'];
 				break;
 			}
 		}
@@ -117,13 +130,16 @@ class CustomerForm extends CFormModel
 		switch ($this->scenario) {
 			case 'delete':
 				$sql = "delete from swo_company where id = :id and city = :city";
+				$this->delHistorySave();
 				break;
 			case 'new':
 				$sql = "insert into swo_company(
 							code, name, full_name, tax_reg_no, cont_name, cont_phone, address,
+							group_id, group_name, status,
 							city, luu, lcu
 						) values (
 							:code, :name, :full_name, :tax_reg_no, :cont_name, :cont_phone, :address,
+							:group_id, :group_name, :status,
 							:city, :luu, :lcu
 						)";
 				break;
@@ -135,7 +151,11 @@ class CustomerForm extends CFormModel
 							tax_reg_no = :tax_reg_no, 
 							cont_name = :cont_name, 
 							cont_phone = :cont_phone, 
+							email = :email,
 							address = :address, 
+							group_id = :group_id,
+							group_name = :group_name,
+							status = :status,
 							luu = :luu 
 						where id = :id and city = :city
 						";
@@ -160,10 +180,18 @@ class CustomerForm extends CFormModel
 			$command->bindParam(':cont_name',$this->cont_name,PDO::PARAM_STR);
 		if (strpos($sql,':cont_phone')!==false)
 			$command->bindParam(':cont_phone',$this->cont_phone,PDO::PARAM_STR);
+        if (strpos($sql,':email')!==false)
+            $command->bindParam(':email',$this->email,PDO::PARAM_STR);
 		if (strpos($sql,':address')!==false)
 			$command->bindParam(':address',$this->address,PDO::PARAM_STR);
 		if (strpos($sql,':city')!==false)
 			$command->bindParam(':city',$city,PDO::PARAM_STR);
+		if (strpos($sql,':group_id')!==false)
+			$command->bindParam(':group_id',$this->group_id,PDO::PARAM_STR);
+		if (strpos($sql,':group_name')!==false)
+			$command->bindParam(':group_name',$this->group_name,PDO::PARAM_STR);
+		if (strpos($sql,':status')!==false)
+			$command->bindParam(':status',$this->status,PDO::PARAM_INT);
 		if (strpos($sql,':lcu')!==false)
 			$command->bindParam(':lcu',$uid,PDO::PARAM_STR);
 		if (strpos($sql,':luu')!==false)
@@ -174,4 +202,47 @@ class CustomerForm extends CFormModel
 			$this->id = Yii::app()->db->getLastInsertID();
 		return true;
 	}
+	
+	public function getStatusList() {
+		return array(
+			0=>Yii::t('customer','Unknown'),
+			1=>Yii::t('customer','In Service'),
+			2=>Yii::t('customer','Stop Service'),
+			3=>Yii::t('customer','Others'),
+		);
+	}
+
+    //哪些字段修改后需要记录
+    protected function historyUpdateList(){
+	    $list = array(
+	        'code','name','full_name','tax_reg_no','cont_name','cont_phone','email','address',
+	        'group_id','group_name','status'
+        );
+        return $list;
+    }
+
+    //哪些字段修改后需要记录
+    protected function getNameForValue($key,$value){
+        return $value;
+    }
+
+    protected function delHistorySave(){
+        $model = new CustomerForm();
+        $model->retrieveData($this->id);
+        $keyArr = self::historyUpdateList();
+        $delText=array();
+        $delText[]="id：".$this->id;
+        foreach ($keyArr as $key){
+            $delText[]=$this->getAttributeLabel($key)."：".self::getNameForValue($key,$model->$key);
+        }
+        $delText= implode("<br/>",$delText);
+        $systemLogModel = new SystemLogForm();
+        $systemLogModel->log_date=date("Y/m/d H:i:s");
+        $systemLogModel->log_user=Yii::app()->user->id;
+        $systemLogModel->log_type=get_class($this);
+        $systemLogModel->log_type_name="客户资料";
+        $systemLogModel->option_str="删除";
+        $systemLogModel->option_text=$delText;
+        $systemLogModel->insertSystemLog("D");
+    }
 }
