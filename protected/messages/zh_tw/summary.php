@@ -268,5 +268,31 @@ return array(
     'city charge detail'=>'地區主管需要剔除個人銷售業績後取數',
     'employee name'=>'姓名',
     'Update(for add)'=>'更改服務（只含新增）',
+
+    'KA Technician'=>'KA技術員',
+    'stop sum none'=>'計算停單率的終止金額',
+    'num stop show'=>'暫停後終止服務金額',
+    'num stop none'=>'計算凈增及停單率終止服務金額',
+
+    'Actual service amount'=>'實際服務金額',
+    'Outsource amount'=>'外包服務總金額',
+    'Outsource rate'=>'外包比例',
+    'Outsource cost amount'=>'外包成本',
+    'Outsource cost rate'=>'外包成本/外包服務總金額%',
+    'Outsource productivity'=>'外包人員生產力',
+
+    'All'=>'全部',
+    'Other'=>'其它',
+    'Professional'=>'專職',
+    'Staff Type'=>'員工類型',
+    'stop 2024 11'=>'歷史暫停轉終止',
+    'net 2024 11'=>'凈增長(剔除暫停轉終止)',
+    'index_note_1'=>'按月份查詢邏輯：根據財務邏輯計算實際生意額（含交叉派單、調整金額計算），根據實際服務生意額報表裏的數據，實際服務生意額報表是當月6日到次月5日簽離的收入',
+    'index_note_2'=>'按日期查詢邏輯：根據工作日期查詢已完成服務的工作單（只計算工單金額），即按工單的日期進行查詢，每月的1日到最後一天',
+
+    'Year month'=>'年月',
+    'One Service'=>'一次性服務',
+    'U INV'=>'派單系統產品',
+    'U service'=>'派單系統服務'
 );
 ?>

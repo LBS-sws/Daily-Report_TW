@@ -195,6 +195,10 @@ return array(
                 'access'=>'G12',
                 'url'=>'/salesAnalysis/index',
             ),
+            'Sales productivity'=>array(//销售月均生产率
+                'access'=>'G23',
+                'url'=>'/salesProd/index',
+            ),
             'Average office'=>array(//月预计平均人效
                 'access'=>'G13',
                 'url'=>'/salesAverage/index',

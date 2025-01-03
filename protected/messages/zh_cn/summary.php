@@ -268,5 +268,31 @@ return array(
     'city charge detail'=>'地区主管需要剔除个人销售业绩后取数',
     'employee name'=>'姓名',
     'Update(for add)'=>'更改服务（只含新增）',
+
+    'KA Technician'=>'KA技术员',
+    'stop sum none'=>'计算停单率的终止金额',
+    'num stop show'=>'暂停后终止服务金额',
+    'num stop none'=>'计算净增及停单率终止服务金额',
+
+    'Actual service amount'=>'实际服务金额',
+    'Outsource amount'=>'外包服务总金额',
+    'Outsource rate'=>'外包比例',
+    'Outsource cost amount'=>'外包成本',
+    'Outsource cost rate'=>'外包成本/外包服务总金额%',
+    'Outsource productivity'=>'外包人员生产力',
+
+    'All'=>'全部',
+    'Other'=>'其它',
+    'Professional'=>'专职',
+    'Staff Type'=>'员工类型',
+    'stop 2024 11'=>'历史暂停转终止',
+    'net 2024 11'=>'净增长(剔除暂停转终止)',
+    'index_note_1'=>'按月份查询逻辑：根据财务逻辑计算实际生意额（含交叉派单、调整金额计算），根据实际服务生意额报表里的数据，实际服务生意额报表是当月6日到次月5日签离的收入',
+    'index_note_2'=>'按日期查询逻辑：根据工作日期查询已完成服务的工作单（只计算工单金额），即按工单的日期进行查询，每月的1日到最后一天',
+
+    'Year month'=>'年月',
+    'One Service'=>'一次性服务',
+    'U INV'=>'派单系统产品',
+    'U service'=>'派单系统服务'
 );
 ?>
