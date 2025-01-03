@@ -123,8 +123,12 @@ class DownSummary{
 
                 if(key_exists("background",$list)){
                     $background = $list["background"];
-                    $background = end(explode("#",$background));
-                    $this->setHeaderStyleTwo("{$startStr}{$this->current_row}",$background);
+                    $background = explode("#",$background);
+                    $background = end($background);
+                    $color = key_exists("color",$list)?$list["color"]:"#000000";
+                    $color = explode("#",$color);
+                    $color = end($color);
+                    $this->setHeaderStyleTwo("{$startStr}{$this->current_row}",$background,$color);
                 }
                 $colOne++;
                 $this->th_num++;
