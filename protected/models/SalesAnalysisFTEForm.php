@@ -1,14 +1,12 @@
 <?php
 
-class SalesAnalysisAreaForm extends SalesAnalysisForm
+class SalesAnalysisFTEForm extends SalesAnalysisForm
 {
 
     public function retrieveData() {
-        $twoYear = $this->search_year;
-        $twoYear = ($twoYear-1)."/01/01";
         $city_allow = Yii::app()->user->city_allow();
         $staffRows = $this->getSalesForHr($city_allow,$this->search_date);//员工信息
-        $nowData = $this->getNowYearData($twoYear,$this->end_date,$city_allow);//两年度的数据
+        $nowData = $this->getNowYearData($this->start_date,$this->end_date,$city_allow);//本年度的数据
         $cityList = self::getCityListAndRegion($city_allow);//城市信息
         $this->data = $this->groupAreaForStaffAndData($staffRows,$cityList,$nowData);
 
@@ -18,46 +16,55 @@ class SalesAnalysisAreaForm extends SalesAnalysisForm
     }
 
     protected function resetTdRow(&$list,$bool=false){
-        if($bool){
-            $twoYear = $this->search_year;
-            $twoYear = ($twoYear-1)."/01/01";
-            $sum=0;
-            $count=0;
-            for($i=0;$i<=24;$i++){
-                $dateTimer = empty($i)?strtotime($twoYear):strtotime($twoYear." + {$i} months");
-                if($dateTimer<=strtotime($this->end_date)){
-                    $yearMonth = date("Y/m",$dateTimer);
-                    $sum+=$list[$yearMonth];
-                    $count++;
-                }else{
-                    break;
-                }
-            }
-            $list["now_average"]=empty($count)?0:round($sum/$count);
+        if($this->search_year==2023){
+            $startMonth = 3;
+        }else{
+            $startMonth = 1;
         }
+        for($i=$startMonth;$i<=$this->search_month;$i++){
+            $nowMonth = $i;
+            $nowMonth = $nowMonth>=10?$nowMonth:"0{$nowMonth}";
+            $nowMonth = $this->search_year."/{$nowMonth}";
+            $keyStr = $nowMonth;
+            $nowMonth = key_exists($nowMonth,$list)?$list[$nowMonth]:0;
+            $lastMonth =$i-1;
+            $lastMonth = $lastMonth>=10?$lastMonth:"0{$lastMonth}";
+            $lastMonth = $this->search_year."/{$lastMonth}";
+            $lastMonth = key_exists($lastMonth,$list)?$list[$lastMonth]:0;
+            $list["rate_".$keyStr]=self::computeRate($lastMonth,$nowMonth);
+        }
+        //$data["list"][$month][$number]
+    }
+
+    public static function computeRate($lastStr,$nowStr,$num=0){
+        if(!empty($lastStr)){
+            $rate = round($nowStr/$lastStr,3);
+            $rate = ($rate-$num)*100;
+            $rate.="%";
+        }else{
+            $rate = "";
+        }
+        return $rate;
     }
 
     public function getTopArr(){
-        $twoYear = $this->search_year;
-        $twoYear = ($twoYear-1)."/01/01";
-        $area_name=key_exists("region_name",$this->data)?$this->data["region_name"]:"{city}";
-        $monthArr = array();
-
-        for($i=0;$i<=24;$i++){
-            $dateTimer = empty($i)?strtotime($twoYear):strtotime($twoYear." + {$i} months");
-            if($dateTimer<=strtotime($this->end_date)){
-                $monthArr[]=array("name"=>date("Y年m月",$dateTimer));
-            }else{
-                break;
-            }
+        if($this->search_year==2023){
+            $startMonth = 3;
+        }else{
+            $startMonth = 1;
         }
-        $monthArr[]=array("name"=>Yii::t("summary","Average"));
+        $monthArr = array();
+        for($i=$startMonth;$i<=$this->search_month;$i++){
+            $monthArr[]=array("name"=>$i.Yii::t("summary","Month"));
+        }
         $topList=array(
-            array("name"=>$area_name,"rowspan"=>2,"background"=>"#00B0F0","color"=>"#FFFFFF"),//区域
-            array("name"=>Yii::t("summary","FTE"),"rowspan"=>2,"background"=>"#00B0F0","color"=>"#FFFFFF"),//销售人数
-            array("name"=>Yii::t("summary","Productivity"),"background"=>"#00B0F0","color"=>"#FFFFFF",
+            array("name"=>Yii::t("summary","all city"),"rowspan"=>2),//区域
+            array("name"=>Yii::t("summary","sales num"),"background"=>"#00B0F0","color"=>"#FFFFFF",
                 "colspan"=>$monthArr
-            ),//生产力
+            ),//销售人数
+            array("name"=>Yii::t("summary","MoM retention rate"),"background"=>"#C5D9F1","color"=>"#FFFFFF",
+                "colspan"=>$monthArr
+            ),//MoM retention rate
         );
         return $topList;
     }
@@ -66,14 +73,9 @@ class SalesAnalysisAreaForm extends SalesAnalysisForm
     public function salesAnalysisHtml(){
         $html= '<table id="salesAnalysisArea" class="table table-fixed table-condensed table-bordered table-hover">';
         if(!empty($this->data)){
-            $data = $this->data;
             $this->downJsonText=array();
-            foreach ($data as $city_data){
-                $this->data = $city_data;
-                $html.=$this->tableTopHtml();
-                $html.=$this->tableBodyHtml();
-                //$html.=$this->tableFooterHtml();
-            }
+            $html.=$this->tableTopHtml();
+            $html.=$this->tableBodyHtml();
             $this->downJsonText=json_encode($this->downJsonText);
         }
         $html.="</table>";
@@ -131,9 +133,9 @@ class SalesAnalysisAreaForm extends SalesAnalysisForm
         $html="<tr>";
         for($i=0;$i<$this->th_sum;$i++){
             if($i==0){
-                $width=170;
+                $width=150;
             }else{
-                $width=80;
+                $width=70;
             }
             $html.="<th class='header-width' data-width='{$width}' width='{$width}px'>{$i}</th>";
         }
@@ -143,8 +145,10 @@ class SalesAnalysisAreaForm extends SalesAnalysisForm
     public function tableBodyHtml(){
         $html="";
         if(!empty($this->data)){
+            $data = $this->data;
+            $data = key_exists("list",$data)?$data["list"]:array();
             $html.="<tbody>";
-            $html.=$this->showServiceHtml($this->data["list"]);
+            $html.=$this->showServiceHtml($data);
             $html.="</tbody>";
         }
         return $html;
@@ -152,22 +156,22 @@ class SalesAnalysisAreaForm extends SalesAnalysisForm
 
     //获取td对应的键名
     protected function getDataAllKeyStr(){
-        $twoYear = $this->search_year;
-        $twoYear = ($twoYear-1)."/01/01";
-        $bodyKey = array(
-            "name",
-            "fte_num"
-        );
-
-        for($i=0;$i<=24;$i++){
-            $dateTimer = empty($i)?strtotime($twoYear):strtotime($twoYear." + {$i} months");
-            if($dateTimer<=strtotime($this->end_date)){
-                $bodyKey[]=date("Y/m",$dateTimer);
-            }else{
-                break;
-            }
+        if($this->search_year==2023){
+            $startMonth = 3;
+        }else{
+            $startMonth = 1;
         }
-        $bodyKey[]="now_average";
+        $bodyKey = array(
+            "title"
+        );
+        $arrRate=array();
+        for($i=$startMonth;$i<=$this->search_month;$i++){
+            $month = $i>=10?$i:"0{$i}";
+            $keyStr = $this->search_year."/{$month}";
+            $bodyKey[]=$keyStr;
+            $arrRate[]="rate_".$keyStr;
+        }
+        $bodyKey=array_merge($bodyKey,$arrRate);
         return $bodyKey;
     }
 
@@ -176,17 +180,32 @@ class SalesAnalysisAreaForm extends SalesAnalysisForm
         $bodyKey = $this->getDataAllKeyStr();
         $html="";
         if(!empty($data)){
-            //ksort($data,1);//根据键名从小到大排序
+            $all = array("title"=>Yii::t("summary","all total"));
             foreach ($data as $monthStr=>$cityList){
                 $this->resetTdRow($cityList);
                 $html.="<tr>";
                 foreach ($bodyKey as $keyStr){
                     $text = key_exists($keyStr,$cityList)?$cityList[$keyStr]:"0";
-                    $this->downJsonText[$cityList['region']][$monthStr][$keyStr]=$text;
+                    if(!key_exists($keyStr,$all)){
+                        $all[$keyStr]=0;
+                    }
+                    if(is_numeric($text)){
+                        $all[$keyStr]+=$text;
+                    }
+                    $this->downJsonText["all"]["list"][$monthStr][$keyStr]=$text;
                     $html.="<td><span>{$text}</span></td>";
                 }
                 $html.="</tr>";
             }
+            $this->resetTdRow($all);
+            $html.="<tr style='font-weight: bold;'>";
+            //合计
+            foreach ($bodyKey as $keyStr){
+                $text = key_exists($keyStr,$all)?$all[$keyStr]:"0";
+                $this->downJsonText["all"]["count"][$keyStr]=$text;
+                $html.="<td><span>{$text}</span></td>";
+            }
+            $html.="</tr>";
             $html.="<tr class='tr-end'><td colspan='{$this->th_sum}'>&nbsp;</td></tr>";
             $html.="<tr class='tr-end'><td colspan='{$this->th_sum}'>&nbsp;</td></tr>";
         }

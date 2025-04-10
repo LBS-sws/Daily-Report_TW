@@ -6,7 +6,7 @@ class SalesAnalysisCityForm extends SalesAnalysisForm
         $city_allow = Yii::app()->user->city_allow();
         $lifelineList = LifelineForm::getLifeLineList($city_allow,$this->search_date);//生命线
         $staffRows = $this->getSalesForHr($city_allow,$this->search_date);//员工信息
-        $nowData = $this->getNowYearData($city_allow);//本年度的数据
+        $nowData = $this->getNowYearData($this->start_date,$this->end_date,$city_allow);//本年度的数据
         $cityList = self::getCityListAndRegion($city_allow);//城市信息
         $this->data = $this->groupCityForStaffAndData($staffRows,$cityList,$nowData,$lifelineList);
 
@@ -82,6 +82,9 @@ class SalesAnalysisCityForm extends SalesAnalysisForm
             }
             $colNum = empty($colNum)?1:$colNum;
             $trOne.="<th style='{$style}' colspan='{$colNum}'";
+            if($colNum>1){
+                $trOne.=" class='click-th'";
+            }
             if(key_exists("rowspan",$list)){
                 $trOne.=" rowspan='{$list["rowspan"]}'";
             }
